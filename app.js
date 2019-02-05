@@ -7,9 +7,7 @@ $(document).ready(function () {
     let size = 10;
     let unit = 'miles';
     let today = getToday();
-
-    // let test = OSREC.CurrencyFormatter.format(2534234, { currency: 'EUR' });
-    // console.log(test);
+    let weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
     let DOM = {
         inputLocation: $('#cityInput'),
@@ -78,10 +76,10 @@ $(document).ready(function () {
                     const artistName = attractions[j].name;
                     const genreSummary = createGenreSummary(thisEvent);
                     const venueSummary = createVenueSummary(thisEvent);
+                    const dateSummary = createDateSummary(thisEvent);
                     const priceSummary = createPriceSummary(thisEvent);
                     const ticketLink = thisEvent.url;
 
-                    const date = thisEvent.dates.start.localDate;
                     const time = convertTime(thisEvent.dates.start.localTime);
                     // const timeZone = thisEvent.dates.timezone;
                     // const timeSummary = time + ' - ' + timeZone;
@@ -90,7 +88,7 @@ $(document).ready(function () {
                     let artistSpan = createSpan(artistName, 'artistName');
                     let genreSpan = createSpan(genreSummary, 'genreSummary');
                     let venueSpan = createSpan(venueSummary, 'venueSummary');
-                    let dateSpan = createSpan(date, 'date');
+                    let dateSpan = createSpan(dateSummary, 'dateSummary');
                     let timeSpan = createSpan(time, 'time');
                     // let timeSpan = createSpan(timeSummary,'timeSummary');
                     let priceSpan = createSpan(priceSummary, 'priceSummary');
@@ -208,6 +206,16 @@ $(document).ready(function () {
         else {
             return venueLocation;
         }
+    }
+
+    function createDateSummary(event) {
+        let dateString = event.dates.start.localDate;
+        let format = "YYYY-MM-DD";
+        let convertedDate = moment(dateString, format);
+        let newDate = new Date(convertedDate.format("MMM DD, YYYY"))
+        let weekDay = weekdays[newDate.getDay()];
+        let newDateString = convertedDate.format("MMM Do, YYYY")
+        return weekDay + ', ' + newDateString;
     }
 
     function createPriceSummary(event) {
