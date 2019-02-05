@@ -101,7 +101,7 @@ $(document).ready(function () {
                     const ticketLink = thisEvent.url;
 
                     const date = thisEvent.dates.start.localDate;
-                    const time = thisEvent.dates.start.localTime;
+                    const time = convertTime(thisEvent.dates.start.localTime);
                     // const timeZone = thisEvent.dates.timezone;
                     // const timeSummary = time + ' - ' + timeZone;
 
@@ -139,6 +139,21 @@ $(document).ready(function () {
             console.log('Ticketmaster may not be available in this area.')
             DOM.results.html('Ticketmaster may not be available in this area.');
         }
+    }
+
+    function convertTime(string) {
+        let hour = parseInt(string.substring(0,2));
+        let tail;
+        if (hour < 12) {
+            tail = 'AM';
+        }
+        else {
+            hour -= 12;
+            tail = 'PM';
+        }
+        let short = hour + string.substring(2,string.length-3);
+        
+        return short + tail;
     }
 
     function createLinkButton(text, url, className) {
