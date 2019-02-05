@@ -11,7 +11,8 @@ $(document).ready(function () {
     let DOM = {
         inputLocation: $('#cityInput'),
         searchButton: $('#searchBtn'),
-        container: $('.container')
+        container: $('.container'),
+        results: $('#results')
     }
 
     DOM.searchButton.on('click', function () {
@@ -19,56 +20,87 @@ $(document).ready(function () {
         let input = DOM.inputLocation.val().trim();
 
         getCoords(input).then(function (coords) {
-            getEvents(coords).then(function (result) {
+            let ticketURL = "https://app.ticketmaster.com/discovery/v2/events.json?latlong=" + coords + "&radius=" + radius + "&unit=" + unit + "&size=" + size + "&classificationName=music&apikey=" + ticketmasterAPIkey;
+            getEvents(ticketURL).then(function (result) {
 
                 if (result._embedded !== undefined) {
-                    let i = 0;
+                    for (let i = 0; i < result._embedded.events.length; i++) {
 
-                    const artistName = result._embedded.events[i]._embedded.attractions[0].name;
+                        let thisEvent = result._embedded.events[i];
+                        let attractions = thisEvent._embedded.attractions;
 
-                    const genre = result._embedded.events[i].classifications[0].genre.name;
-                    const subGenre = result._embedded.events[i].classifications[0].subGenre.name;
-                    const genreSummary = genre + ' / ' + subGenre;
+                        for (let j = 0; j < attractions.length; j++) {
 
-                    const venue = result._embedded.events[i]._embedded.venues[0];
-                    const venueSummary = createVenueSummary(venue)
+                            const artistName = attractions[j].name;
 
-                    const date = result._embedded.events[i].dates.start.localDate;
-                    const time = result._embedded.events[i].dates.start.localTime;
-                    const timeZone = result._embedded.events[i].dates.timezone;
-                    const timeSummary = time + ' - ' + timeZone;
+                            const genreSummary = createGenreSummary(thisEvent);
 
-                    const priceData = result._embedded.events[i].priceRanges[0];
-                    const priceSummary = createPriceSummary(priceData);
+                            const venueSummary = createVenueSummary(thisEvent)
 
-                    const ticketLink = result._embedded.events[i].url;
+                            const date = thisEvent.dates.start.localDate;
+                            const time = thisEvent.dates.start.localTime;
+                            // const timeZone = thisEvent.dates.timezone;
+                            // const timeSummary = time + ' - ' + timeZone;
 
-                    console.log(artistName, genreSummary, venueSummary, date, time, timeZone, priceSummary, ticketLink);
-                    // console.log(result._embedded);
+                            const priceSummary = createPriceSummary(thisEvent);
 
-                    DOM.container.append(createSpan(artistName,'artistName'));
-                    DOM.container.append(createSpan(genreSummary,'genreSummary'));
-                    DOM.container.append(createSpan(venueSummary,'venueSummary'));
-                    DOM.container.append(createSpan(timeSummary,'timeSummary'));
-                    DOM.container.append(createSpan(priceSummary,'priceSummary'));
-                    DOM.container.append(createLinkButton('Buy Tickets',ticketLink,'ticketLink'));
+                            const ticketLink = thisEvent.url;
 
+                            let resultDiv = $('<div>');
+                            let artistSpan = createSpan(artistName, 'artistName');
+                            let genreSpan = createSpan(genreSummary, 'genreSummary');
+                            let venueSpan = createSpan(venueSummary, 'venueSummary');
+                            let dateSpan = createSpan(date, 'date');
+                            let timeSpan = createSpan(time, 'time');
+                            // let timeSpan = createSpan(timeSummary,'timeSummary');
+                            let priceSpan = createSpan(priceSummary, 'priceSummary');
+                            let ticketBtn = createLinkButton('Buy Tickets', ticketLink, 'ticketLink')
+
+                            resultDiv.empty();
+                            resultDiv.append(artistSpan);
+                            resultDiv.append('<br />')
+                            resultDiv.append(genreSpan);
+                            resultDiv.append('<br />')
+                            resultDiv.append(venueSpan);
+                            resultDiv.append('<br />')
+                            resultDiv.append(dateSpan);
+                            resultDiv.append('<br />')
+                            resultDiv.append(timeSpan);
+                            resultDiv.append('<br />')
+                            resultDiv.append(priceSpan);
+                            resultDiv.append('<br />')
+                            resultDiv.append(ticketBtn);
+                            resultDiv.append('<br />')
+                            resultDiv.append('<br />')
+                            DOM.results.append(resultDiv);
+                        }
+                    }
                 }
                 else {
                     // TODO: Error handling when no results found
                     console.log('Ticketmaster may not be available in this area.')
-                    DOM.container.append('Ticketmaster may not be available in this area.');
+                    DOM.results.html('Ticketmaster may not be available in this area.');
                 }
+
+                console.log(result._links);
+                console.log(result._links.first);
+                console.log(result._links.self);
+                console.log(result._links.next);
+                console.log(result._links.last);
             });
         });
     });
 
-    function createLinkButton(text,url,className) {
+    function displayResults(result) {
+        
+    }
+
+    function createLinkButton(text, url, className) {
         let newBtn = $('<button>');
-        newBtn.attr('url',url);
+        newBtn.attr('url', url);
         newBtn.text(text)
         newBtn.addClass(className);
-        newBtn.on('click',function () {
+        newBtn.on('click', function () {
             openInNewTab(url);
         });
         return newBtn;
@@ -77,16 +109,17 @@ $(document).ready(function () {
     function openInNewTab(url) {
         let win = window.open(url, '_blank');
         win.focus();
-      }
+    }
 
-    function createSpan(content,className) {
+    function createSpan(content, className) {
         let newSpan = $('<span>');
         newSpan.addClass(className);
         newSpan.html(content);
         return newSpan;
     }
 
-    function createVenueSummary(venue) {
+    function createVenueSummary(event) {
+        const venue = event._embedded.venues[0];
         const venueName = venue.name;
         const venueCity = venue.city.name;
         const countryCode = venue.country.countryCode;
@@ -107,21 +140,41 @@ $(document).ready(function () {
         }
     }
 
-    function createPriceSummary(priceData) {
-        const min = priceData.min;
-        const max = priceData.max;
-        const currency = priceData.currency;
-        if (min === max) {
-            return 'Price: ' + min + ' ' + currency
+    function createPriceSummary(event) {
+        if (event.priceRanges !== undefined) {
+            const priceData = event.priceRanges[0];
+            const min = priceData.min;
+            const max = priceData.max;
+            const currency = priceData.currency;
+            if (min === max) {
+                return 'Price: ' + min + ' ' + currency
+            }
+            else {
+                return 'Price Range: ' + min + ' - ' + max + ' ' + currency
+            }
         }
         else {
-            return 'Price Range: ' + min + ' - ' + max + ' ' + currency
+            return 'Price: N/A';
         }
     }
 
+    function createGenreSummary(event) {
+        let classification = event.classifications[0];
+        const genre = classification.genre.name;
+        let genreSummary;
+        if (classification.subGenre !== undefined && genre !== classification.subGenre.name) {
+            const subGenre = classification.subGenre.name;
+            genreSummary = genre + ' / ' + subGenre;
+        }
+        else {
+            genreSummary = genre
+        }
+        return genreSummary;
+    }
+
     async function getCoords(userInput) {
-        geoURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userInput + "&key=" + geocodingAPIkey
-        console.log(geoURL);
+        geoURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userInput + "&key=" + geocodingAPIkey;
+
         const response = await $.ajax({
             url: geoURL,
             method: "GET"
@@ -134,13 +187,11 @@ $(document).ready(function () {
         return coords;
     }
 
-    async function getEvents(coords) {
-        ticketURL = "https://app.ticketmaster.com/discovery/v2/events.json?latlong=" + coords + "&radius=" + radius + "&unit=" + unit + "&size=" + size + "&classificationName=music&apikey=" + ticketmasterAPIkey;
-        console.log(ticketURL);
+    async function getEvents(url) {
 
         const response = await $.ajax({
             type: "GET",
-            url: ticketURL,
+            url: url,
             async: true,
             dataType: "json",
             // function(json) {
@@ -152,7 +203,6 @@ $(document).ready(function () {
 
     // EXAMPLE URLS FOR API DATA
     // GOOGLE GEOCODE
-    // https://maps.googleapis.com/maps/api/geocode/json?address=Paris&key=AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k
     // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k
     //  https://maps.googleapis.com/maps/api/geocode/json?address=22201&key=AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k
 
@@ -160,4 +210,5 @@ $(document).ready(function () {
     // https://app.ticketmaster.com/discovery/v2/events.json?latlong=38.839787,-77.061339&radius=10&unit=miles&size=200&stateCode=VA&countryCode=US&apikey=1FADcqMEkzQiSakwUoKLPibod91GMG6g
     // https://app.ticketmaster.com/discovery/v2/events.json?latlong=32.735687,-97.10806559999999&radius=20&unit=miles&size=20&classificationName=music&apikey=1FADcqMEkzQiSakwUoKLPibod91GMG6g
 
+    // possible app name - Earshot? or Nearshot?
 });
