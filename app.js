@@ -30,35 +30,6 @@ $(document).ready(function () {
         });
     });
 
-    function createPageBtn(text, url) {
-        let newBtn = $('<button>');
-        newBtn.text(text);
-        newBtn.on('click', function () {
-            event.preventDefault();
-            getEvents(url).then(function (result) {
-                displayPgBtns(result);
-                displayResults(result);
-            });
-        });
-        return newBtn;
-    }
-
-    function getToday() {
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var yyyy = today.getFullYear();
-
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        today = yyyy + '-' + mm + '-' + dd;
-        return today;
-    }
-
     function displayPgBtns(result) {
         let firstURL = "https://app.ticketmaster.com" + result._links.first.href + "&apikey=" + ticketmasterAPIkey;
         let lastURL = "https://app.ticketmaster.com" + result._links.last.href + "&apikey=" + ticketmasterAPIkey;
@@ -141,6 +112,22 @@ $(document).ready(function () {
         }
     }
 
+    function getToday() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = yyyy + '-' + mm + '-' + dd;
+        return today;
+    }
+
     function convertTime(string) {
         let hour = parseInt(string.substring(0, 2));
         let tail;
@@ -156,6 +143,19 @@ $(document).ready(function () {
         let short = hour + string.substring(2, string.length - 3);
 
         return short + tail;
+    }
+
+    function createPageBtn(text, url) {
+        let newBtn = $('<button>');
+        newBtn.text(text);
+        newBtn.on('click', function () {
+            event.preventDefault();
+            getEvents(url).then(function (result) {
+                displayPgBtns(result);
+                displayResults(result);
+            });
+        });
+        return newBtn;
     }
 
     function createLinkButton(text, url, className) {
