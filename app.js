@@ -27,7 +27,7 @@ $(document).ready(function () {
             getEvents(ticketURL).then(function (result) {
                 if (result._embedded !== undefined) {
                     displayPgBtns(result,DOM.pagesTop);
-                    displayResults(result);
+                    displayResults(result,DOM.events);
                     displayPgBtns(result,DOM.pagesBottom);
                 }
                 else {
@@ -63,8 +63,8 @@ $(document).ready(function () {
         }
     }
 
-    function displayResults(result) {
-        DOM.events.empty();
+    function displayResults(result,div) {
+        div.empty();
         for (let i = 0; i < result._embedded.events.length; i++) {
 
             let thisEvent = result._embedded.events[i];
@@ -108,7 +108,7 @@ $(document).ready(function () {
                     resultDiv.append(ticketBtn);
                     resultDiv.append('<br />')
                     resultDiv.append('<br />')
-                    DOM.events.append(resultDiv);
+                    div.append(resultDiv);
                 }
             }
         }
@@ -121,7 +121,7 @@ $(document).ready(function () {
             event.preventDefault();
             getEvents(url).then(function (result) {
                 displayPgBtns(result,DOM.pagesTop);
-                displayResults(result);
+                displayResults(result,DOM.events);
                 displayPgBtns(result,DOM.pagesBottom);
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
             });
