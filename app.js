@@ -36,7 +36,6 @@ $(document).ready(function () {
         newBtn.on('click', function () {
             event.preventDefault();
             getEvents(url).then(function (result) {
-                console.log(result._links);
                 displayPgBtns(result);
                 displayResults(result);
             });
@@ -91,46 +90,47 @@ $(document).ready(function () {
 
                 let thisEvent = result._embedded.events[i];
                 let attractions = thisEvent._embedded.attractions;
+                if (attractions !== undefined) {
+                    for (let j = 0; j < attractions.length; j++) {
 
-                for (let j = 0; j < attractions.length; j++) {
+                        const artistName = attractions[j].name;
+                        const genreSummary = createGenreSummary(thisEvent);
+                        const venueSummary = createVenueSummary(thisEvent);
+                        const priceSummary = createPriceSummary(thisEvent);
+                        const ticketLink = thisEvent.url;
 
-                    const artistName = attractions[j].name;
-                    const genreSummary = createGenreSummary(thisEvent);
-                    const venueSummary = createVenueSummary(thisEvent);
-                    const priceSummary = createPriceSummary(thisEvent);
-                    const ticketLink = thisEvent.url;
+                        const date = thisEvent.dates.start.localDate;
+                        const time = convertTime(thisEvent.dates.start.localTime);
+                        // const timeZone = thisEvent.dates.timezone;
+                        // const timeSummary = time + ' - ' + timeZone;
 
-                    const date = thisEvent.dates.start.localDate;
-                    const time = convertTime(thisEvent.dates.start.localTime);
-                    // const timeZone = thisEvent.dates.timezone;
-                    // const timeSummary = time + ' - ' + timeZone;
+                        let resultDiv = $('<div>');
+                        let artistSpan = createSpan(artistName, 'artistName');
+                        let genreSpan = createSpan(genreSummary, 'genreSummary');
+                        let venueSpan = createSpan(venueSummary, 'venueSummary');
+                        let dateSpan = createSpan(date, 'date');
+                        let timeSpan = createSpan(time, 'time');
+                        // let timeSpan = createSpan(timeSummary,'timeSummary');
+                        let priceSpan = createSpan(priceSummary, 'priceSummary');
+                        let ticketBtn = createLinkButton('Buy Tickets', ticketLink, 'ticketLink')
 
-                    let resultDiv = $('<div>');
-                    let artistSpan = createSpan(artistName, 'artistName');
-                    let genreSpan = createSpan(genreSummary, 'genreSummary');
-                    let venueSpan = createSpan(venueSummary, 'venueSummary');
-                    let dateSpan = createSpan(date, 'date');
-                    let timeSpan = createSpan(time, 'time');
-                    // let timeSpan = createSpan(timeSummary,'timeSummary');
-                    let priceSpan = createSpan(priceSummary, 'priceSummary');
-                    let ticketBtn = createLinkButton('Buy Tickets', ticketLink, 'ticketLink')
-
-                    resultDiv.append(artistSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(genreSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(venueSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(dateSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(timeSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(priceSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(ticketBtn);
-                    resultDiv.append('<br />')
-                    resultDiv.append('<br />')
-                    DOM.events.append(resultDiv);
+                        resultDiv.append(artistSpan);
+                        resultDiv.append('<br />')
+                        resultDiv.append(genreSpan);
+                        resultDiv.append('<br />')
+                        resultDiv.append(venueSpan);
+                        resultDiv.append('<br />')
+                        resultDiv.append(dateSpan);
+                        resultDiv.append('<br />')
+                        resultDiv.append(timeSpan);
+                        resultDiv.append('<br />')
+                        resultDiv.append(priceSpan);
+                        resultDiv.append('<br />')
+                        resultDiv.append(ticketBtn);
+                        resultDiv.append('<br />')
+                        resultDiv.append('<br />')
+                        DOM.events.append(resultDiv);
+                    }
                 }
             }
         }
@@ -142,17 +142,19 @@ $(document).ready(function () {
     }
 
     function convertTime(string) {
-        let hour = parseInt(string.substring(0,2));
+        let hour = parseInt(string.substring(0, 2));
         let tail;
         if (hour < 12) {
             tail = 'AM';
         }
         else {
-            hour -= 12;
+            if (hour > 12) {
+                hour -= 12;
+            }
             tail = 'PM';
         }
-        let short = hour + string.substring(2,string.length-3);
-        
+        let short = hour + string.substring(2, string.length - 3);
+
         return short + tail;
     }
 
