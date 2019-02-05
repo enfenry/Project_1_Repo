@@ -6,6 +6,7 @@ $(document).ready(function () {
     let radius = 20;
     let size = 20;
     let unit = 'miles';
+    let today = getToday();
 
     let DOM = {
         inputLocation: $('#cityInput'),
@@ -21,9 +22,8 @@ $(document).ready(function () {
         let input = DOM.inputLocation.val().trim();
 
         getCoords(input).then(function (coords) {
-            let ticketURL = "https://app.ticketmaster.com/discovery/v2/events.json?latlong=" + coords + "&radius=" + radius + "&unit=" + unit + "&size=" + size + "&classificationName=music&apikey=" + ticketmasterAPIkey;
+            let ticketURL = "https://app.ticketmaster.com/discovery/v2/events.json?latlong=" + coords + "&startDateTime=" + today + "T14:00:00Z&sort=date,asc&radius=" + radius + "&unit=" + unit + "&size=" + size + "&classificationName=music&apikey=" + ticketmasterAPIkey;
             getEvents(ticketURL).then(function (result) {
-                console.log(result._links);
                 displayPgBtns(result);
                 displayResults(result);
             });
@@ -42,6 +42,22 @@ $(document).ready(function () {
             });
         });
         return newBtn;
+    }
+
+    function getToday() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = yyyy + '-' + mm + '-' + dd;
+        return today;
     }
 
     function displayPgBtns(result) {
@@ -64,7 +80,7 @@ $(document).ready(function () {
             let nextPgBtn = createPageBtn('Next', nextURL);
             DOM.pages.append(nextPgBtn);
         }
-        
+
         DOM.pages.append(lastPgBtn);
     }
 
