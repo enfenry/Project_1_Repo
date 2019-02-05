@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-
     const geocodingAPIkey = 'AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k';
     const ticketmasterAPIkey = '1FADcqMEkzQiSakwUoKLPibod91GMG6g';
     let geoURL;
@@ -10,45 +9,84 @@ $(document).ready(function () {
     let unit = 'miles';
 
     let DOM = {
-        input: $('#cityInput'),
+        inputLocation: $('#cityInput'),
         searchButton: $('#searchBtn'),
+        container: $('.container')
     }
-
 
     DOM.searchButton.on('click', function () {
         event.preventDefault();
-        let input = DOM.input.val().trim();
+        let input = DOM.inputLocation.val().trim();
+
         getCoords(input).then(function (coords) {
             getEvents(coords).then(function (result) {
 
-                let i = 0;
+                if (result._embedded !== undefined) {
+                    let i = 0;
 
-                const artistName = result._embedded.events[i]._embedded.attractions[0].name;
+                    const artistName = result._embedded.events[i]._embedded.attractions[0].name;
 
-                const genre = result._embedded.events[i].classifications[0].genre.name;
-                const subGenre = result._embedded.events[i].classifications[0].subGenre.name;
-                const genreSummary = genre + ' / ' + subGenre;
+                    const genre = result._embedded.events[i].classifications[0].genre.name;
+                    const subGenre = result._embedded.events[i].classifications[0].subGenre.name;
+                    const genreSummary = genre + ' / ' + subGenre;
 
-                const venue = result._embedded.events[i]._embedded.venues[0];
-                const venueLocation = createLocationSummary(venue)
+                    const venue = result._embedded.events[i]._embedded.venues[0];
+                    const venueSummary = createVenueSummary(venue)
 
-                const date = result._embedded.events[i].dates.start.localDate;
-                const time = result._embedded.events[i].dates.start.localTime;
-                const timeZone = result._embedded.events[i].dates.timezone;
+                    const date = result._embedded.events[i].dates.start.localDate;
+                    const time = result._embedded.events[i].dates.start.localTime;
+                    const timeZone = result._embedded.events[i].dates.timezone;
+                    const timeSummary = time + ' - ' + timeZone;
 
-                const priceData = result._embedded.events[i].priceRanges[0];
-                const priceSummary = createPriceSummary(priceData);
+                    const priceData = result._embedded.events[i].priceRanges[0];
+                    const priceSummary = createPriceSummary(priceData);
 
-                const ticketLink = result._embedded.events[i].url;
+                    const ticketLink = result._embedded.events[i].url;
 
-                console.log(artistName, genreSummary, venueLocation, date, time, timeZone, priceSummary, ticketLink);
-                // console.log(result._embedded);
+                    console.log(artistName, genreSummary, venueSummary, date, time, timeZone, priceSummary, ticketLink);
+                    // console.log(result._embedded);
 
+                    DOM.container.append(createSpan(artistName,'artistName'));
+                    DOM.container.append(createSpan(genreSummary,'genreSummary'));
+                    DOM.container.append(createSpan(venueSummary,'venueSummary'));
+                    DOM.container.append(createSpan(timeSummary,'timeSummary'));
+                    DOM.container.append(createSpan(priceSummary,'priceSummary'));
+                    DOM.container.append(createLinkButton('Buy Tickets',ticketLink,'ticketLink'));
+
+                }
+                else {
+                    // TODO: Error handling when no results found
+                    console.log('Ticketmaster may not be available in this area.')
+                    DOM.container.append('Ticketmaster may not be available in this area.');
+                }
             });
         });
     });
 
-    function createLocationSummary(venue) {
+    function createLinkButton(text,url,className) {
+        let newBtn = $('<button>');
+        newBtn.attr('url',url);
+        newBtn.text(text)
+        newBtn.addClass(className);
+        newBtn.on('click',function () {
+            openInNewTab(url);
+        });
+        return newBtn;
+    }
+
+    function openInNewTab(url) {
+        let win = window.open(url, '_blank');
+        win.focus();
+      }
+
+    function createSpan(content,className) {
+        let newSpan = $('<span>');
+        newSpan.addClass(className);
+        newSpan.html(content);
+        return newSpan;
+    }
+
+    function createVenueSummary(venue) {
         const venueName = venue.name;
         const venueCity = venue.city.name;
         const countryCode = venue.country.countryCode;
@@ -58,7 +96,7 @@ $(document).ready(function () {
             venueLocation = venueCity + ', ' + venueState;
         }
         else {
-            venueLocation =  venueCity + ', ' + countryCode;
+            venueLocation = venueCity + ', ' + countryCode;
         }
 
         if (venueName !== undefined) {
@@ -80,7 +118,6 @@ $(document).ready(function () {
             return 'Price Range: ' + min + ' - ' + max + ' ' + currency
         }
     }
-
 
     async function getCoords(userInput) {
         geoURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + userInput + "&key=" + geocodingAPIkey
@@ -113,8 +150,6 @@ $(document).ready(function () {
         return response;
     }
 
-
-
     // EXAMPLE URLS FOR API DATA
     // GOOGLE GEOCODE
     // https://maps.googleapis.com/maps/api/geocode/json?address=Paris&key=AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k
@@ -124,12 +159,5 @@ $(document).ready(function () {
     // TICKETMASTER
     // https://app.ticketmaster.com/discovery/v2/events.json?latlong=38.839787,-77.061339&radius=10&unit=miles&size=200&stateCode=VA&countryCode=US&apikey=1FADcqMEkzQiSakwUoKLPibod91GMG6g
     // https://app.ticketmaster.com/discovery/v2/events.json?latlong=32.735687,-97.10806559999999&radius=20&unit=miles&size=20&classificationName=music&apikey=1FADcqMEkzQiSakwUoKLPibod91GMG6g
-
-    // - TicketMaster
-    // - function to get link to event page
-    // - function to get price range of tickets
-    // - function to get artist
-    // - function to get Venue
-    // - function to get date/time of event
 
 });
