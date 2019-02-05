@@ -8,6 +8,9 @@ $(document).ready(function () {
     let unit = 'miles';
     let today = getToday();
 
+    // let test = OSREC.CurrencyFormatter.format(2534234, { currency: 'EUR' });
+    // console.log(test);
+
     let DOM = {
         inputLocation: $('#cityInput'),
         searchButton: $('#searchBtn'),
@@ -213,11 +216,13 @@ $(document).ready(function () {
             const min = priceData.min;
             const max = priceData.max;
             const currency = priceData.currency;
+            const minCurrency = OSREC.CurrencyFormatter.format(min, { currency: currency });
+            const maxCurrency = OSREC.CurrencyFormatter.format(max, { currency: currency });
             if (min === max) {
-                return 'Price: ' + min + ' ' + currency
+                return 'Price: ' + minCurrency
             }
             else {
-                return 'Price Range: ' + min + ' - ' + max + ' ' + currency
+                return 'Price Range: ' + minCurrency + ' - ' + maxCurrency
             }
         }
         else {
