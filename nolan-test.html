@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,17 +11,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- <script src="https://www.gstatic.com/firebasejs/5.8.0/firebase.js"></script> -->
 </head>
+
 <body>
 
     <div class='container'>
         <form>
             <input type='text' id='cityInput' placeholder='Enter city/state or zip'>
-            <button type ='submit' id='searchBtn'>Find Concerts</button>
+            <button type='submit' id='searchBtn'>Find Concerts</button>
         </form>
         <div id='results'>
+            <div id='pages'>
+            </div>
+            <div id='events'>
+            </div>
         </div>
     </div>
 
     <script src="app.js"></script>
 </body>
+
 </html>
