@@ -24,22 +24,7 @@ $(document).ready(function () {
             let ticketURL = "https://app.ticketmaster.com/discovery/v2/events.json?latlong=" + coords + "&radius=" + radius + "&unit=" + unit + "&size=" + size + "&classificationName=music&apikey=" + ticketmasterAPIkey;
             getEvents(ticketURL).then(function (result) {
                 console.log(result._links);
-
-                let firstURL = "https://app.ticketmaster.com" + result._links.first.href + "&apikey=" + ticketmasterAPIkey;
-                let selfURL = "https://app.ticketmaster.com" + result._links.self.href + "&apikey=" + ticketmasterAPIkey;
-                let nextURL = "https://app.ticketmaster.com" + result._links.next.href + "&apikey=" + ticketmasterAPIkey;
-                let lastURL = "https://app.ticketmaster.com" + result._links.last.href + "&apikey=" + ticketmasterAPIkey;
-
-                let firstPgBtn = createPageBtn('First', firstURL);
-                let selfPgBtn = createPageBtn('Self', selfURL);
-                let nextPgBtn = createPageBtn('Next', nextURL);
-                let lastPgBtn = createPageBtn('Last', lastURL);
-
-                DOM.pages.html(firstPgBtn);
-                DOM.pages.append(selfPgBtn);
-                DOM.pages.append(nextPgBtn);
-                DOM.pages.append(lastPgBtn);
-
+                displayPgBtns(result);
                 displayResults(result);
             });
         });
@@ -51,10 +36,36 @@ $(document).ready(function () {
         newBtn.on('click', function () {
             event.preventDefault();
             getEvents(url).then(function (result) {
+                console.log(result._links);
+                displayPgBtns(result);
                 displayResults(result);
             });
         });
         return newBtn;
+    }
+
+    function displayPgBtns(result) {
+        let firstURL = "https://app.ticketmaster.com" + result._links.first.href + "&apikey=" + ticketmasterAPIkey;
+        let lastURL = "https://app.ticketmaster.com" + result._links.last.href + "&apikey=" + ticketmasterAPIkey;
+
+        let firstPgBtn = createPageBtn('First', firstURL);
+        let lastPgBtn = createPageBtn('Last', lastURL);
+
+        DOM.pages.html(firstPgBtn);
+
+        if (result._links.prev !== undefined) {
+            let prevURL = "https://app.ticketmaster.com" + result._links.prev.href + "&apikey=" + ticketmasterAPIkey;
+            let prevPgBtn = createPageBtn('Prev', prevURL);
+            DOM.pages.append(prevPgBtn);
+        }
+
+        if (result._links.next !== undefined) {
+            let nextURL = "https://app.ticketmaster.com" + result._links.next.href + "&apikey=" + ticketmasterAPIkey;
+            let nextPgBtn = createPageBtn('Next', nextURL);
+            DOM.pages.append(nextPgBtn);
+        }
+        
+        DOM.pages.append(lastPgBtn);
     }
 
     function displayResults(result) {
