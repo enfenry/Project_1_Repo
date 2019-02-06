@@ -5,9 +5,10 @@ $(document).ready(function () {
     let geoURL;
     let radius = 15;
     let size = 10;
+    let maxPages = (1000 / size) - 1;
     let unit = 'miles';
     let today = getToday();
-    let weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    let weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     let DOM = {
         inputLocation: $('#cityInput'),
@@ -27,9 +28,9 @@ $(document).ready(function () {
             let ticketURL = "https://app.ticketmaster.com/discovery/v2/events.json?latlong=" + coords + "&startDateTime=" + today + "T14:00:00Z&sort=date,asc&radius=" + radius + "&unit=" + unit + "&size=" + size + "&classificationName=music&apikey=" + ticketmasterAPIkey;
             getEvents(ticketURL).then(function (result) {
                 if (result._embedded !== undefined) {
-                    displayPgBtns(result,DOM.pagesTop);
-                    displayResults(result,DOM.events);
-                    displayPgBtns(result,DOM.pagesBottom);
+                    displayPgBtns(result, DOM.pagesTop);
+                    displayResults(result, DOM.events);
+                    displayPgBtns(result, DOM.pagesBottom);
                 }
                 else {
                     DOM.results.html('Ticketmaster may not be available in this area.');
@@ -38,33 +39,59 @@ $(document).ready(function () {
         });
     });
 
-    function displayPgBtns(result,div) {
+    function displayPgBtns(result, div) {
         if (result._links.first.href !== result._links.last.href) {
-            let firstURL = "https://app.ticketmaster.com" + result._links.first.href + "&apikey=" + ticketmasterAPIkey;
-            let lastURL = "https://app.ticketmaster.com" + result._links.last.href + "&apikey=" + ticketmasterAPIkey;
 
-            let firstPgBtn = createPageBtn('First', firstURL);
-            let lastPgBtn = createPageBtn('Last', lastURL);
+            let firstURL = "https://app.ticketmaster.com" + result._links.first.href + "&apikey=" + ticketmasterAPIkey;
+            let selfURL = "https://app.ticketmaster.com" + result._links.self.href + "&apikey=" + ticketmasterAPIkey;
+            let lastURL = "https://app.ticketmaster.com" + result._links.last.href + "&apikey=" + ticketmasterAPIkey;
+            let maxURL = getMaxURL(lastURL);
+
+            let maxPgNum = getPageNum(maxURL) + 1;
+
+            let currentPgNum = getPageNum(selfURL) + 1;
+
+            let firstPgBtn = createPageBtn('1', firstURL);
+            styleCurrentBtn(firstPgBtn, currentPgNum);
+            let ellipseBtn = createFakeBtn('...');
+            let maxPgBtn = createPageBtn(maxPgNum, maxURL);
+            styleCurrentBtn(maxPgBtn, currentPgNum);
 
             div.html(firstPgBtn);
 
-            if (result._links.prev !== undefined) {
+            if (currentPgNum > 2) {
+                div.append(ellipseBtn);
+            }
+
+            if (result._links.prev !== undefined && currentPgNum !== 2) {
                 let prevURL = "https://app.ticketmaster.com" + result._links.prev.href + "&apikey=" + ticketmasterAPIkey;
-                let prevPgBtn = createPageBtn('Prev', prevURL);
+                let prevPgBtn = createPageBtn(currentPgNum - 1, prevURL);
+                styleCurrentBtn(prevPgBtn, currentPgNum);
                 div.append(prevPgBtn);
             }
 
-            if (result._links.next !== undefined) {
+            if (currentPgNum !== 1 && currentPgNum !== maxPgNum) {
+                let selfPgBtn = createFakeBtn(currentPgNum);
+                styleCurrentBtn(selfPgBtn, currentPgNum);
+                div.append(selfPgBtn);
+            }
+
+            if (maxPgNum - currentPgNum > 1) {
                 let nextURL = "https://app.ticketmaster.com" + result._links.next.href + "&apikey=" + ticketmasterAPIkey;
-                let nextPgBtn = createPageBtn('Next', nextURL);
+                let nextPgBtn = createPageBtn(currentPgNum + 1, nextURL);
+                styleCurrentBtn(nextPgBtn, currentPgNum);
+                nextPgBtn.addClass('next')
                 div.append(nextPgBtn);
             }
 
-            div.append(lastPgBtn);
+            if (maxPgNum - currentPgNum > 2) {
+                div.append(ellipseBtn);
+            }
+            div.append(maxPgBtn);
         }
     }
 
-    function displayResults(result,div) {
+    function displayResults(result, div) {
         div.empty();
         for (let i = 0; i < result._embedded.events.length; i++) {
 
@@ -115,15 +142,49 @@ $(document).ready(function () {
         }
     }
 
+    function styleCurrentBtn(button, currentPgNum) {
+        if (button.text() == currentPgNum) {
+            button.attr('style', 'background-color:cyan');
+        }
+    }
+
+    function getPageNum(url) {
+        let startLocat = url.indexOf('page=');
+        if (startLocat === -1) {
+            return 0;
+        }
+        let subStr = url.substring(startLocat, url.length);
+        let subLocat = subStr.indexOf('&');
+        let pgNum = parseInt(subStr.substring(5, subLocat));
+        return pgNum;
+    }
+
+    function getMaxURL(lastURL) {
+        let startLocat = lastURL.indexOf('page=');
+        let subStr = lastURL.substring(startLocat, lastURL.length);
+        let subLocat = subStr.indexOf('&');
+        let lastPgNum = parseInt(subStr.substring(5, subLocat));
+        let maxURL = lastURL.substring(0, startLocat) + 'page=' + Math.min(lastPgNum, maxPages) + lastURL.substring(startLocat + subLocat, lastURL.length);
+        return maxURL;
+    }
+
+    // creates a page button that doesn't include a function
+    // e.g. for current page or '...'
+    function createFakeBtn(text) {
+        let newBtn = $('<button>');
+        newBtn.text(text);
+        return newBtn;
+    }
+
     function createPageBtn(text, url) {
         let newBtn = $('<button>');
         newBtn.text(text);
         newBtn.on('click', function () {
             event.preventDefault();
             getEvents(url).then(function (result) {
-                displayPgBtns(result,DOM.pagesTop);
-                displayResults(result,DOM.events);
-                displayPgBtns(result,DOM.pagesBottom);
+                displayPgBtns(result, DOM.pagesTop);
+                displayResults(result, DOM.events);
+                displayPgBtns(result, DOM.pagesBottom);
                 document.body.scrollTop = document.documentElement.scrollTop = 0;
             });
         });
@@ -227,10 +288,10 @@ $(document).ready(function () {
             const minCurrency = OSREC.CurrencyFormatter.format(min, { currency: currency });
             const maxCurrency = OSREC.CurrencyFormatter.format(max, { currency: currency });
             if (min === max) {
-                return 'Price: ' + minCurrency
+                return 'Price: ' + minCurrency;
             }
             else {
-                return 'Price Range: ' + minCurrency + ' - ' + maxCurrency
+                return 'Price Range: ' + minCurrency + ' - ' + maxCurrency;
             }
         }
         else {
@@ -279,10 +340,7 @@ $(document).ready(function () {
             type: "GET",
             url: url,
             async: true,
-            dataType: "json",
-            // function(json) {
-            //     console.log(json);
-            // }
+            dataType: "json"
         });
         return response;
     }
