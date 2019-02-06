@@ -33,7 +33,7 @@ $(document).ready(function () {
                     displayPgBtns(result, DOM.pagesBottom);
                 }
                 else {
-                    DOM.results.html('Ticketmaster may not be available in this area.');
+                    DOM.results.html("Try a more specific search. It's possible Ticketmaster may not be available in this area.");
                 }
             });
         });
