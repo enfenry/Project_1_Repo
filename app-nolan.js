@@ -45,49 +45,60 @@ $(document).ready(function () {
             let firstURL = "https://app.ticketmaster.com" + result._links.first.href + "&apikey=" + ticketmasterAPIkey;
             let selfURL = "https://app.ticketmaster.com" + result._links.self.href + "&apikey=" + ticketmasterAPIkey;
             let lastURL = "https://app.ticketmaster.com" + result._links.last.href + "&apikey=" + ticketmasterAPIkey;
-            let maxURL = getMaxURL(lastURL);
 
+            let genericURL = createGenericURL(firstURL);
+
+            let maxURL = getMaxURL(lastURL);
             let maxPgNum = getPageNum(maxURL) + 1;
 
             let currentPgNum = getPageNum(selfURL) + 1;
 
-            let firstPgBtn = createPageBtn('1', firstURL);
-            styleCurrentBtn(firstPgBtn, currentPgNum);
-            let ellipseBtn = createFakeBtn('...');
-            let maxPgBtn = createPageBtn(maxPgNum, maxURL);
-            styleCurrentBtn(maxPgBtn, currentPgNum);
+            div.html('');
 
-            div.html(firstPgBtn);
-
-            if (currentPgNum > 2) {
-                div.append(ellipseBtn);
+            if (currentPgNum <= 5) {
+                let i = 0;
+                let j = Math.min(7,maxPgNum);
+                do {
+                        let pgBtn = createPageBtn(i + 1, genericURL + '&page=' + i);
+                        styleCurrentBtn(pgBtn, currentPgNum);
+                        div.append(pgBtn);
+                        i++;
+                } while (i < j);
+                if (j !== maxPgNum) {
+                let ellipseBtn2 = createFakeBtn('...');
+                div.append(ellipseBtn2);
+                let maxPgBtn = createPageBtn(maxPgNum, maxURL);
+                div.append(maxPgBtn);
+                }
             }
-
-            if (result._links.prev !== undefined && currentPgNum !== 2) {
-                let prevURL = "https://app.ticketmaster.com" + result._links.prev.href + "&apikey=" + ticketmasterAPIkey;
-                let prevPgBtn = createPageBtn(currentPgNum - 1, prevURL);
-                styleCurrentBtn(prevPgBtn, currentPgNum);
-                div.append(prevPgBtn);
+            else if (maxPgNum - currentPgNum <= 5) {
+                let firstPgBtn = createPageBtn('1', firstURL);
+                div.append(firstPgBtn);
+                let ellipseBtn1 = createFakeBtn('...');
+                div.append(ellipseBtn1);
+                let i =7;
+                do {
+                    let pgBtn = createPageBtn(maxPgNum - i + 1, genericURL + '&page=' + (maxPgNum - i));
+                    styleCurrentBtn(pgBtn, currentPgNum);
+                    div.append(pgBtn);
+                    i--;
+                } while (i > 0);
             }
-
-            if (currentPgNum !== 1 && currentPgNum !== maxPgNum) {
-                let selfPgBtn = createFakeBtn(currentPgNum);
-                styleCurrentBtn(selfPgBtn, currentPgNum);
-                div.append(selfPgBtn);
+            else {
+                let firstPgBtn = createPageBtn('1', firstURL);
+                div.append(firstPgBtn);
+                let ellipseBtn1 = createFakeBtn('...');
+                div.append(ellipseBtn1);
+                for (let i = 0; i < 5; i++) {
+                    let pgBtn = createPageBtn(currentPgNum + i - 2, genericURL + '&page=' + (currentPgNum + i - 3));
+                    styleCurrentBtn(pgBtn, currentPgNum);
+                    div.append(pgBtn);
+                }
+                let ellipseBtn2 = createFakeBtn('...');
+                div.append(ellipseBtn2);
+                let maxPgBtn = createPageBtn(maxPgNum, maxURL);
+                div.append(maxPgBtn);
             }
-
-            if (maxPgNum - currentPgNum > 1) {
-                let nextURL = "https://app.ticketmaster.com" + result._links.next.href + "&apikey=" + ticketmasterAPIkey;
-                let nextPgBtn = createPageBtn(currentPgNum + 1, nextURL);
-                styleCurrentBtn(nextPgBtn, currentPgNum);
-                nextPgBtn.addClass('next')
-                div.append(nextPgBtn);
-            }
-
-            if (maxPgNum - currentPgNum > 2) {
-                div.append(ellipseBtn);
-            }
-            div.append(maxPgBtn);
         }
     }
 
@@ -146,6 +157,13 @@ $(document).ready(function () {
         if (button.text() == currentPgNum) {
             button.attr('style', 'background-color:cyan');
         }
+    }
+
+    function createGenericURL(url) {
+        let startLocat = url.indexOf('page=');
+        let subStr = url.substring(startLocat, url.length);
+        let subLocat = subStr.indexOf('&');
+        return genericURL = url.substring(0, startLocat) + url.substring(startLocat + subLocat, url.length);
     }
 
     function getPageNum(url) {
