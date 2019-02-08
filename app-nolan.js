@@ -348,7 +348,7 @@ $(document).ready(function () {
         const latitude = response.results[0].geometry.location.lat;
         const longitude = response.results[0].geometry.location.lng;
         const coords = latitude + ',' + longitude;
-
+        console.log(coords);
         return coords;
     }
 
