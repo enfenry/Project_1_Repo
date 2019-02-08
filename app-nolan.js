@@ -53,14 +53,15 @@ $(document).ready(function () {
 
             let firstPgBtn = createPageBtn('1', firstURL);
             styleCurrentBtn(firstPgBtn, currentPgNum);
-            let ellipseBtn = createFakeBtn('...');
+            let ellipseBtn1 = createFakeBtn('...');
+            let ellipseBtn2 = createFakeBtn('...');
             let maxPgBtn = createPageBtn(maxPgNum, maxURL);
             styleCurrentBtn(maxPgBtn, currentPgNum);
 
             div.html(firstPgBtn);
 
             if (currentPgNum > 2) {
-                div.append(ellipseBtn);
+                div.append(ellipseBtn1);
             }
 
             if (result._links.prev !== undefined && currentPgNum !== 2) {
@@ -85,7 +86,7 @@ $(document).ready(function () {
             }
 
             if (maxPgNum - currentPgNum > 2) {
-                div.append(ellipseBtn);
+                div.append(ellipseBtn2);
             }
             div.append(maxPgBtn);
         }
