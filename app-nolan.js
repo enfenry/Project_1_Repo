@@ -60,7 +60,7 @@ $(document).ready(function () {
 
             div.html(firstPgBtn);
 
-            if (currentPgNum > 2) {
+            if (currentPgNum > 3) {
                 div.append(ellipseBtn1);
             }
 
