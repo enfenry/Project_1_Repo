@@ -3,6 +3,7 @@ $(document).ready(function () {
     const geocodingAPIkey = 'AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k';
     const ticketmasterAPIkey = '1FADcqMEkzQiSakwUoKLPibod91GMG6g';
     let geoURL;
+    let reverseGeoURL;
     let radius = 15;
     let size = 10;
     let maxPages = (1000 / size) - 1;
@@ -33,7 +34,9 @@ $(document).ready(function () {
                     displayPgBtns(result, DOM.pagesBottom);
                 }
                 else {
-                    DOM.results.html("Try a more specific search. It's possible Ticketmaster may not be available in this area.");
+                    getArea(coords).then(function(area){
+                        DOM.events.html("No events found near " + area + ". Try refining your search. It's possible Ticketmaster may not be available in this area.");
+                    });
                 }
             });
         });
@@ -41,7 +44,6 @@ $(document).ready(function () {
 
     function displayPgBtns(result, div) {
         if (result._links.first.href !== result._links.last.href) {
-
             let firstURL = "https://app.ticketmaster.com" + result._links.first.href + "&apikey=" + ticketmasterAPIkey;
             let selfURL = "https://app.ticketmaster.com" + result._links.self.href + "&apikey=" + ticketmasterAPIkey;
             let lastURL = "https://app.ticketmaster.com" + result._links.last.href + "&apikey=" + ticketmasterAPIkey;
@@ -348,8 +350,23 @@ $(document).ready(function () {
         const latitude = response.results[0].geometry.location.lat;
         const longitude = response.results[0].geometry.location.lng;
         const coords = latitude + ',' + longitude;
-
         return coords;
+    }
+
+    async function getArea(coords) {
+        reverseGeoURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coords + "&key=" + geocodingAPIkey;
+
+        const response = await $.ajax({
+            url: reverseGeoURL,
+            method: "GET"
+        });
+        for (let i= 0; i < response.results.length; i++) {
+            for (let j = 0; j < response.results[i].types.length; j++) {
+                if (response.results[i].types[j] === 'administrative_area_level_2') {
+                    return response.results[i].formatted_address;
+                }
+            }
+        }
     }
 
     async function getEvents(url) {
