@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+
     var config = {
         apiKey: "AIzaSyAAcY2NfP7w8YTzprHrP77SGLAvMAi8c5c",
         authDomain: "bootcampak-48e6f.firebaseapp.com",
@@ -12,6 +13,9 @@ $(document).ready(function () {
     firebase.initializeApp(config);
 
     var database = firebase.database(); 
+
+    // clearing out database upon load
+    database.ref('/artists').remove();
 
     const geocodingAPIkey = 'AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k';
     const ticketmasterAPIkey = '1FADcqMEkzQiSakwUoKLPibod91GMG6g';
@@ -477,14 +481,4 @@ $(document).ready(function () {
         $('#events').append(newArtist);
     })
 
-    // EXAMPLE URLS FOR API DATA
-    // GOOGLE GEOCODE
-    // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k
-    //  https://maps.googleapis.com/maps/api/geocode/json?address=22201&key=AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k
-
-    // TICKETMASTER
-    // https://app.ticketmaster.com/discovery/v2/events.json?latlong=38.839787,-77.061339&radius=10&unit=miles&size=200&stateCode=VA&countryCode=US&apikey=1FADcqMEkzQiSakwUoKLPibod91GMG6g
-    // https://app.ticketmaster.com/discovery/v2/events.json?latlong=32.735687,-97.10806559999999&radius=20&unit=miles&size=20&classificationName=music&apikey=1FADcqMEkzQiSakwUoKLPibod91GMG6g
-
-    // possible app name - Earshot? or Nearshot?
 });
