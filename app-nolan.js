@@ -137,8 +137,6 @@ $(document).ready(function () {
 
                     spotifyData(artistName, venueSummary, dateSummary, priceSummary, ticketLink, time);
 
-    
-
                 }
             }
         }
@@ -231,24 +229,6 @@ $(document).ready(function () {
         let short = hour + string.substring(2, string.length - 3);
 
         return short + tail;
-    }
-
-    function createLinkButton(text, url, className) {
-        let newBtn = $('<button>');
-        newBtn.attr('url', url);
-        newBtn.text(text)
-        newBtn.addClass(className);
-        newBtn.on('click', function () {
-            openInNewTab(url);
-        });
-        return newBtn;
-    }
-
-    function createSpan(content, className) {
-        let newSpan = $('<span>');
-        newSpan.addClass(className);
-        newSpan.html(content);
-        return newSpan;
     }
 
     function openInNewTab(url) {
@@ -433,19 +413,13 @@ $(document).ready(function () {
                         var newRow = "<tr><td>"+thisArtist.topTracks[i];
                         thisArtist.topTracksPrint.push(newRow);
                     }
-        
+
                     // pushing artist object to allArtists object
                     allArtists.push(thisArtist);
     
                     database.ref('/artists').push(thisArtist);
-        
-            
                 });
             }
-    
-    
-        
-    
         });
     
     
@@ -469,8 +443,7 @@ $(document).ready(function () {
         var ticketLink = childSnapshot.val().ticketLink;
         var time = childSnapshot.val().time;
         var topTracksPrint = childSnapshot.val().topTracksPrint;
-
-    
+        
         var newArtist = $("<div>");
         $(newArtist).html(`
         <p><b>Artist Name: </b><span id="name">${name}</span></p> 
