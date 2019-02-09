@@ -356,7 +356,7 @@ $(document).ready(function () {
     }
     
     var allArtists = [];
-    var token = 'BQA6iYX6swUW4P6eokOE-Vg1nb_2fV040FDOwCVqmtlXPBSHXJJ9s4lrghUIhLFzTp3FdrXrGPEqYguPkLk';
+    var token = 'BQBEshNEn3hfCKJ__3P0n-JhBf2-EmNr979tUthdb_5a3CIylwqoQn8nETomWaIbJ2cguGy_55sTfIBT7YU';
 
     // spotify API calls
     var spotifyData = function(artist, venueSummary, genreSummary, dateSummary, priceSummary, ticketLink, time) {
@@ -454,27 +454,97 @@ $(document).ready(function () {
         var topTracksPrint = childSnapshot.val().topTracksPrint;
         
         var newArtist = $("<div>");
-        $(newArtist).html(`
-        <p><b>Artist Name: </b><span id="name">${name}</span></p> 
-        <p><b>Followers: </b><span id="followers">${numberWithCommas(followers)}</span> </p>
-        <p><b>Album Cover:</b><span id="cover"><img src='${cover}'></span> </p>
-        <p><b>Genre Summary:</b><span id="cover">${genreSummary}</span> </p>
-        <p><b>Venue Summary:</b><span id="cover">${venueSummary}</span> </p>
-        <p><b>Date Summary:</b><span id="cover">${dateSummary}</span> </p>
-        <p><b>Price Summary:</b><span id="cover">${priceSummary}</span> </p>
-        <p><b>Ticket Link:</b><span id="cover">${ticketLink}</span> </p>
-        <p><b>Time:</b><span id="cover">${time}</span> </p>
-        <table class="table table-hover table-sm" id='tracks-table'>
-            <thead class='thead-dark'>
-                <tr>
-                <th scope="col">Top Songs</th>
-                </tr>
-            </thead>
-            <tbody>
-            ${topTracksPrint.join("")};
-            </tbody>
-        </table>
-        `)
+        $(newArtist).html(
+
+        `
+        <section class="projects-section bg-light">
+        <div class="container">
+    
+          <!-- Featured Project Row -->
+          <div id="projects" class="row align-items-center no-gutters mb-4 mb-lg-5">
+            <div class="col-xl-4 col-lg-7">
+              <img id="results-image" class="img-fluid mb-3 mb-lg-0" src="img/resultsSearchImage.jpg" alt="">
+            </div>
+            <div class="col-xl-4 col-lg-5">
+              <div class="featured-text text-center text-lg-left">
+                <h4>band name</h4>
+                <p class="text-black-50 mb-0">Followers</p>
+                <P class="text-black-50 mb-0">Genre1 Genre2 Genre3</P>
+                
+              </div>
+            </div>
+            <div class="col-xl-4 col-lg-5">
+              <div class="featured-text text-center text-lg-left">
+                <P class="text-black-50 mb-0">Venue</P>
+                <P class="text-black-50 mb-0">date</P>
+                <P class="text-black-50 mb-0">time</P>
+                <P class="text-black-50 mb-0">Price Range</P>
+    
+              </div>
+            </div>
+            
+            <!--<div class="col-xl-4 col-lg-5">
+                <div class="featured-text text-center text-lg-left">
+                    
+                </div>
+              </div>-->
+            <div class="col-xl-4 col-lg-5">
+                <div class="hitsong-text text-center text-lg-left">
+                  <p class="text-black-50 mb-0">Hit Songs</p>
+                  <P class="text-black-50 mb-0">song1</P>
+                  <P class="text-black-50 mb-0">song2</P>
+                  <P class="text-black-50 mb-0">song3</P>
+                  <P class="text-black-50 mb-0">song4</P>
+      
+                </div>
+                
+              </div>
+              <div class="col-xl-4 col-lg-10">
+                <div class="featured-text text-center text-lg-left">
+                  <button type="submit" class="btn btn-primary mx-auto">
+                    <i class="fab fa-spotify fa-2x"></i>
+                  </button>
+                  
+                </div>
+              </div>
+    
+              <div class="col-xl-4 col-lg-10">
+                  <div class="featured-text text-center text-lg-left">
+                    <button type="submit" class="btn btn-primary mx-auto">buy tickets</button>
+                    
+                  </div>
+                </div>
+    
+          </div>
+    
+      </section>
+        `
+            
+            
+            
+        // `
+        // <p><b>Artist Name: </b><span id="name">${name}</span></p> 
+        // <p><b>Followers: </b><span id="followers">${numberWithCommas(followers)}</span> </p>
+        // <p><b>Album Cover:</b><span id="cover"><img src='${cover}'></span> </p>
+        // <p><b>Genre Summary:</b><span id="cover">${genreSummary}</span> </p>
+        // <p><b>Venue Summary:</b><span id="cover">${venueSummary}</span> </p>
+        // <p><b>Date Summary:</b><span id="cover">${dateSummary}</span> </p>
+        // <p><b>Price Summary:</b><span id="cover">${priceSummary}</span> </p>
+        // <p><b>Ticket Link:</b><span id="cover">${ticketLink}</span> </p>
+        // <p><b>Time:</b><span id="cover">${time}</span> </p>
+        // <table class="table table-hover table-sm" id='tracks-table'>
+        //     <thead class='thead-dark'>
+        //         <tr>
+        //         <th scope="col">Top Songs</th>
+        //         </tr>
+        //     </thead>
+        //     <tbody>
+        //     ${topTracksPrint.join("")};
+        //     </tbody>
+        // </table>
+        // `
+        
+        )
 
     
         // console.log(topTracks);
