@@ -370,7 +370,7 @@ $(document).ready(function () {
     }
     
     var allArtists = [];
-    var token = 'BQAgomWbGBDJi3GlEGkJ2tYZz0RZAxNDlBRZ_4YP0tEiKzTlcz3vHhsEIqgSad0zQLlUierhlXlvRINi-CQ';
+    var token = 'BQDPSyVbB55CxTcrW_vGDFzWXuPniXmLQS5J2GHLLLNmRk_HrTCsdfb44gJL-zyv6NrsJ-ZiQz3xBZYE8dE';
 
     // spotify API calls
     var spotifyData = function(artist, venueSummary, dateSummary, priceSummary, ticketLink, time) {
@@ -388,6 +388,7 @@ $(document).ready(function () {
                 followers: 0,
                 iden: '',
                 topTracks: [],
+                topTracksPrint: [],
                 venueSummary: '',
                 dateSummary: '',
                 priceSummary: '',
@@ -427,6 +428,11 @@ $(document).ready(function () {
                         // currentSong = currentSong.substring(0, currentSong.length - 1);
                         thisArtist.topTracks.push(currentSong);
                     }
+
+                    for (i=0; i < thisArtist.topTracks.length; i++) {
+                        var newRow = "<tr><td>"+thisArtist.topTracks[i];
+                        thisArtist.topTracksPrint.push(newRow);
+                    }
         
                     // pushing artist object to allArtists object
                     allArtists.push(thisArtist);
@@ -450,8 +456,9 @@ $(document).ready(function () {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
+    // printing from DB
     database.ref('/artists').on("child_added", function(childSnapshot) {
-        console.log(childSnapshot.val());
+        // console.log(childSnapshot.val());
         var name = childSnapshot.val().name;
         var followers = childSnapshot.val().followers;
         var cover = childSnapshot.val().cover;
@@ -461,6 +468,7 @@ $(document).ready(function () {
         var priceSummary = childSnapshot.val().priceSummary;
         var ticketLink = childSnapshot.val().ticketLink;
         var time = childSnapshot.val().time;
+        var topTracksPrint = childSnapshot.val().topTracksPrint;
 
     
         var newArtist = $("<div>");
@@ -480,14 +488,11 @@ $(document).ready(function () {
                 </tr>
             </thead>
             <tbody>
+            ${topTracksPrint.join("")};
             </tbody>
         </table>
         `)
-    
-        for (i=0; i < topTracks.length; i++) {
-            var newRow = "<tr><td>"+topTracks[i];
-            $("#tracks-table > tbody").append(newRow);
-        }
+
     
         // console.log(topTracks);
         $('#events').append(newArtist);
