@@ -37,6 +37,8 @@ $(document).ready(function () {
     DOM.searchButton.on('click', function () {
         event.preventDefault();
         let input = DOM.inputLocation.val().trim();
+        database.ref('/artists').remove();
+
 
         getCoords(input).then(function (coords) {
             let ticketURL = "https://app.ticketmaster.com/discovery/v2/events.json?latlong=" + coords + "&startDateTime=" + today + "T14:00:00Z&sort=date,asc&radius=" + radius + "&unit=" + unit + "&size=" + size + "&classificationName=music&apikey=" + ticketmasterAPIkey;
@@ -458,7 +460,7 @@ $(document).ready(function () {
         <p><b>Price Summary:</b><span id="cover">${priceSummary}</span> </p>
         <p><b>Ticket Link:</b><span id="cover">${ticketLink}</span> </p>
         <p><b>Time:</b><span id="cover">${time}</span> </p>
-        <table class="table table-hover" id='tracks-table'>
+        <table class="table table-hover table-sm" id='tracks-table'>
             <thead class='thead-dark'>
                 <tr>
                 <th scope="col">Top Songs</th>
