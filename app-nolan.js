@@ -1,5 +1,18 @@
 $(document).ready(function () {
 
+    var config = {
+        apiKey: "AIzaSyAAcY2NfP7w8YTzprHrP77SGLAvMAi8c5c",
+        authDomain: "bootcampak-48e6f.firebaseapp.com",
+        databaseURL: "https://bootcampak-48e6f.firebaseio.com",
+        projectId: "bootcampak-48e6f",
+        storageBucket: "bootcampak-48e6f.appspot.com",
+        messagingSenderId: "833308392906"
+      };
+
+    firebase.initializeApp(config);
+
+    var database = firebase.database(); 
+
     const geocodingAPIkey = 'AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k';
     const ticketmasterAPIkey = '1FADcqMEkzQiSakwUoKLPibod91GMG6g';
     let geoURL;
@@ -121,35 +134,11 @@ $(document).ready(function () {
                     const ticketLink = thisEvent.url;
 
                     const time = convertTime(thisEvent.dates.start.localTime);
-                    // const timeZone = thisEvent.dates.timezone;
-                    // const timeSummary = time + ' - ' + timeZone;
 
-                    let resultDiv = $('<div>');
-                    let artistSpan = createSpan(artistName, 'artistName');
-                    let genreSpan = createSpan(genreSummary, 'genreSummary');
-                    let venueSpan = createSpan(venueSummary, 'venueSummary');
-                    let dateSpan = createSpan(dateSummary, 'dateSummary');
-                    let timeSpan = createSpan(time, 'time');
-                    // let timeSpan = createSpan(timeSummary,'timeSummary');
-                    let priceSpan = createSpan(priceSummary, 'priceSummary');
-                    let ticketBtn = createLinkButton('Buy Tickets', ticketLink, 'ticketLink')
+                    spotifyData(artistName, venueSummary, dateSummary, priceSummary, ticketLink, time);
 
-                    resultDiv.append(artistSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(genreSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(venueSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(dateSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(timeSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(priceSpan);
-                    resultDiv.append('<br />')
-                    resultDiv.append(ticketBtn);
-                    resultDiv.append('<br />')
-                    resultDiv.append('<br />')
-                    div.append(resultDiv);
+    
+
                 }
             }
         }
@@ -379,6 +368,130 @@ $(document).ready(function () {
         });
         return response;
     }
+    
+    var allArtists = [];
+    var token = 'BQAgomWbGBDJi3GlEGkJ2tYZz0RZAxNDlBRZ_4YP0tEiKzTlcz3vHhsEIqgSad0zQLlUierhlXlvRINi-CQ';
+
+    // spotify API calls
+    var spotifyData = function(artist, venueSummary, dateSummary, priceSummary, ticketLink, time) {
+        console.log(token);
+        $.ajax({
+        url: `https://api.spotify.com/v1/search?q=${artist}&type=artist&limit=50`,
+        method:"GET",
+        headers: {'Authorization':`Bearer ${token}`},
+        }).then(function(response) {
+            
+            console.log(response);
+    
+            var thisArtist = {
+                name: '',
+                followers: 0,
+                iden: '',
+                topTracks: [],
+                venueSummary: '',
+                dateSummary: '',
+                priceSummary: '',
+                ticketLink: '',
+                time: ''
+            };
+    
+            if (response.artists.items.length === 0) {
+                thisArtist.name = 'Artist not in Spotify';
+                thisArtist.cover = ''; // insert picture of the right dimensions
+                thisArtist.followers = 'follower data not available';
+                thisArtist.iden = '';
+                thisArtist.topTracks.push('No top songs to display');
+                console.log("empty!!");
+    
+                allArtists.push(thisArtist);
+                
+            } else {
+                thisArtist.name = response.artists.items[0].name;
+                thisArtist.cover = response.artists.items[0].images[2].url;
+                thisArtist.followers = response.artists.items[0].followers.total;
+                thisArtist.iden = response.artists.items[0].id;
+                thisArtist.venueSummary = venueSummary,
+                thisArtist.dateSummary = dateSummary,
+                thisArtist.priceSummary = priceSummary,
+                thisArtist.ticketLink = ticketLink,
+                thisArtist.time = time
+    
+                $.ajax({
+                    url: `https://api.spotify.com/v1/artists/${thisArtist.iden}/top-tracks?country=US`,
+                    method:"GET",
+                    headers: {'Authorization':`Bearer ${token}`},
+                }).then(function(response) {
+                    console.log(response);
+                    for (i=0; i<5; i++) {
+                        currentSong = response.tracks[i].name;
+                        // currentSong = currentSong.substring(0, currentSong.length - 1);
+                        thisArtist.topTracks.push(currentSong);
+                    }
+        
+                    // pushing artist object to allArtists object
+                    allArtists.push(thisArtist);
+    
+                    database.ref('/artists').push(thisArtist);
+        
+            
+                });
+            }
+    
+    
+        
+    
+        });
+    
+    
+    
+    };
+
+    var numberWithCommas = function(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    database.ref('/artists').on("child_added", function(childSnapshot) {
+        console.log(childSnapshot.val());
+        var name = childSnapshot.val().name;
+        var followers = childSnapshot.val().followers;
+        var cover = childSnapshot.val().cover;
+        var topTracks = childSnapshot.val().topTracks;
+        var venueSummary = childSnapshot.val().venueSummary;
+        var dateSummary = childSnapshot.val().dateSummary;
+        var priceSummary = childSnapshot.val().priceSummary;
+        var ticketLink = childSnapshot.val().ticketLink;
+        var time = childSnapshot.val().time;
+
+    
+        var newArtist = $("<div>");
+        $(newArtist).html(`
+        <p><b>Artist Name: </b><span id="name">${name}</span></p> 
+        <p><b>Followers: </b><span id="followers">${numberWithCommas(followers)}</span> </p>
+        <p><b>Album Cover:</b><span id="cover"><img src='${cover}'></span> </p>
+        <p><b>Venue Summary:</b><span id="cover">${venueSummary}</span> </p>
+        <p><b>Date Summary:</b><span id="cover">${dateSummary}</span> </p>
+        <p><b>Price Summary:</b><span id="cover">${priceSummary}</span> </p>
+        <p><b>Ticket Link:</b><span id="cover">${ticketLink}</span> </p>
+        <p><b>Time:</b><span id="cover">${time}</span> </p>
+        <table class="table table-hover" id='tracks-table'>
+            <thead class='thead-dark'>
+                <tr>
+                <th scope="col">Top Songs</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        `)
+    
+        for (i=0; i < topTracks.length; i++) {
+            var newRow = "<tr><td>"+topTracks[i];
+            $("#tracks-table > tbody").append(newRow);
+        }
+    
+        // console.log(topTracks);
+        $('#events').append(newArtist);
+    })
 
     // EXAMPLE URLS FOR API DATA
     // GOOGLE GEOCODE
