@@ -144,7 +144,17 @@ database.ref('/artists').on("child_added", function(childSnapshot) {
     $('#main-artist').append(newArtist);
 })
 
+thisArtist.name = response.artists.items[0].name;
+thisArtist.cover = response.artists.items[0].images[2].url;
+thisArtist.followers = response.artists.items[0].followers.total;
+thisArtist.iden = response.artists.items[0].id;
 
+
+thisArtist.venueSummary = venueSummary,
+thisArtist.dateSummary = dateSummary,
+thisArtist.priceSummary = priceSummary,
+thisArtist.ticketLink = ticketLink,
+thisArtist.time = time
 
 // Extra
 
