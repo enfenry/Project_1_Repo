@@ -456,6 +456,7 @@ $(document).ready(function () {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
+    // printing from DB
     database.ref('/artists').on("child_added", function(childSnapshot) {
         // console.log(childSnapshot.val());
         var name = childSnapshot.val().name;
