@@ -135,9 +135,7 @@ $(document).ready(function () {
 
                     const time = convertTime(thisEvent.dates.start.localTime);
 
-                    spotifyData(artistName, venueSummary, dateSummary, priceSummary, ticketLink, time);
-
-    
+                    spotifyData(artistName, venueSummary, genreSummary, dateSummary, priceSummary, ticketLink, time);
 
                 }
             }
@@ -231,24 +229,6 @@ $(document).ready(function () {
         let short = hour + string.substring(2, string.length - 3);
 
         return short + tail;
-    }
-
-    function createLinkButton(text, url, className) {
-        let newBtn = $('<button>');
-        newBtn.attr('url', url);
-        newBtn.text(text)
-        newBtn.addClass(className);
-        newBtn.on('click', function () {
-            openInNewTab(url);
-        });
-        return newBtn;
-    }
-
-    function createSpan(content, className) {
-        let newSpan = $('<span>');
-        newSpan.addClass(className);
-        newSpan.html(content);
-        return newSpan;
     }
 
     function openInNewTab(url) {
@@ -370,10 +350,10 @@ $(document).ready(function () {
     }
     
     var allArtists = [];
-    var token = 'BQDPSyVbB55CxTcrW_vGDFzWXuPniXmLQS5J2GHLLLNmRk_HrTCsdfb44gJL-zyv6NrsJ-ZiQz3xBZYE8dE';
+    var token = 'BQA6iYX6swUW4P6eokOE-Vg1nb_2fV040FDOwCVqmtlXPBSHXJJ9s4lrghUIhLFzTp3FdrXrGPEqYguPkLk';
 
     // spotify API calls
-    var spotifyData = function(artist, venueSummary, dateSummary, priceSummary, ticketLink, time) {
+    var spotifyData = function(artist, venueSummary, genreSummary, dateSummary, priceSummary, ticketLink, time) {
         console.log(token);
         $.ajax({
         url: `https://api.spotify.com/v1/search?q=${artist}&type=artist&limit=50`,
@@ -390,6 +370,7 @@ $(document).ready(function () {
                 topTracks: [],
                 topTracksPrint: [],
                 venueSummary: '',
+                genreSummary: '',
                 dateSummary: '',
                 priceSummary: '',
                 ticketLink: '',
@@ -412,6 +393,7 @@ $(document).ready(function () {
                 thisArtist.followers = response.artists.items[0].followers.total;
                 thisArtist.iden = response.artists.items[0].id;
                 thisArtist.venueSummary = venueSummary,
+                thisArtist.genreSummary = genreSummary,
                 thisArtist.dateSummary = dateSummary,
                 thisArtist.priceSummary = priceSummary,
                 thisArtist.ticketLink = ticketLink,
@@ -433,19 +415,13 @@ $(document).ready(function () {
                         var newRow = "<tr><td>"+thisArtist.topTracks[i];
                         thisArtist.topTracksPrint.push(newRow);
                     }
-        
+
                     // pushing artist object to allArtists object
                     allArtists.push(thisArtist);
     
                     database.ref('/artists').push(thisArtist);
-        
-            
                 });
             }
-    
-    
-        
-    
         });
     
     
@@ -463,19 +439,20 @@ $(document).ready(function () {
         var followers = childSnapshot.val().followers;
         var cover = childSnapshot.val().cover;
         var topTracks = childSnapshot.val().topTracks;
+        var genreSummary = childSnapshot.val().genreSummary;
         var venueSummary = childSnapshot.val().venueSummary;
         var dateSummary = childSnapshot.val().dateSummary;
         var priceSummary = childSnapshot.val().priceSummary;
         var ticketLink = childSnapshot.val().ticketLink;
         var time = childSnapshot.val().time;
         var topTracksPrint = childSnapshot.val().topTracksPrint;
-
-    
+        
         var newArtist = $("<div>");
         $(newArtist).html(`
         <p><b>Artist Name: </b><span id="name">${name}</span></p> 
         <p><b>Followers: </b><span id="followers">${numberWithCommas(followers)}</span> </p>
         <p><b>Album Cover:</b><span id="cover"><img src='${cover}'></span> </p>
+        <p><b>Genre Summary:</b><span id="cover">${genreSummary}</span> </p>
         <p><b>Venue Summary:</b><span id="cover">${venueSummary}</span> </p>
         <p><b>Date Summary:</b><span id="cover">${dateSummary}</span> </p>
         <p><b>Price Summary:</b><span id="cover">${priceSummary}</span> </p>
