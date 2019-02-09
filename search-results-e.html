@@ -17,137 +17,170 @@
 
 <body>
 
-    <div class="container-fluid">
-        <div class="row" id="masthead">
-
-            <div class="col-md-2">
-                <a class="navbar-brand js-scroll-trigger" href="./index.html"></a>
-            </div>
-            <div class="col-md-8">
-                <form class="form-inline d-flex">
-                    <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail"
-                        placeholder="Enter your city...">
-                </form>
-            </div>
-            <div class="col-md-2">
-                <button type="Find Concerts" class="btn btn-danger js-scroll-trigger">Find Concerts</button>
-            </div>
-        </div>
-        </section>
+ <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="./index-e.html"><img src="./assets/images/logo.png"></a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#projects">Search Results</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#signup">Search More Cities</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <section id="signup" class="background-section">
         <div class="container">
+          <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto text-center">
+    
+              <i class="fas fa-music fa-2x mb-2 text-white"></i>
+              <h2 class="text-white mb-5">Hear it. See it. Live it.</h2>
+    
+              <form class="form-inline d-flex">
+                <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter City">
+                <button type="submit" class="btn btn-primary mx-auto">Find Cool Beats</button>
+              </form>
+    
+            </div>
+          </div>
+        </div>
+      </section>
+    
+      <!-- Projects Section -->
+      <section id="projects" class="projects-section bg-light">
+        <div class="container">
+    
+          <!-- Featured Project Row -->
+          <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+            <div class="col-xl-4 col-lg-7">
+              <img class="img-fluid mb-3 mb-lg-0" src="img/bg-masthead.jpg" alt="">
+            </div>
+            <div class="col-xl-4 col-lg-5">
+              <div class="featured-text text-center text-lg-left">
+                <h4>band name</h4>
+                <p class="text-black-50 mb-0">Followers</p>
+                <P class="text-black-50 mb-0">Genre1 Genre2 Genre3</P>
+                
+              </div>
+            </div>
+            <div class="col-xl-4 col-lg-5">
+              <div class="featured-text text-center text-lg-left">
+                <P class="text-black-50 mb-0">Venue</P>
+                <P class="text-black-50 mb-0">date</P>
+                <P class="text-black-50 mb-0">time</P>
+                <P class="text-black-50 mb-0">Price Range</P>
+    
+              </div>
+            </div>
+            
+            <!--<div class="col-xl-4 col-lg-5">
+                <div class="featured-text text-center text-lg-left">
+                    
+                </div>
+              </div>-->
+            <div class="col-xl-4 col-lg-5">
+                <div class="featured-text text-center text-lg-left">
+                  <p class="text-black-50 mb-0">Hit Songs</p>
+                  <P class="text-black-50 mb-0">song1</P>
+                  <P class="text-black-50 mb-0">song2</P>
+                  <P class="text-black-50 mb-0">song3</P>
+                  <P class="text-black-50 mb-0">song4</P>
+      
+                </div>
+                
+              </div>
+              <div class="col-xl-4 col-lg-10">
+                <div class="text-center text-lg-left">
+                  <button type="submit" class="btn btn-primary mx-auto">
+                    <i class="fab fa-spotify fa-2x"></i>
+                  </button>
+                  
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-10">
+                  <div class="featured-text text-center text-lg-left">
+                    <button type="submit" class="btn btn-primary mx-auto">buy tickets</button>
+                    
+                  </div>
+                </div>
+          </div>
+        </section>
 
-            <hgroup class="mb20">
-                <h1>Search Results</h1>
-                <h2 class="lead"><strong class="text-danger">3</strong> results were found for the search for <strong
-                        class="text-danger">Cold Play</strong></h2>
-            </hgroup>
 
-            <section class="col-xs-12 col-sm-6 col-md-12">
-                <article class="search-result row">
-                    <div class="col-xs-12 col-sm-12 col-md-3">
-                        <a href="#" title="Lorem ipsum" class="thumbnail"><img src="http://lorempixel.com/250/140/people"
-                                alt="Lorem ipsum" /></a>
+        <section id="contact" class="contact-section bg-black">
+                <div class="container">
+            
+                  <div class="row">
+            
+                    <div class="col-md-4 mb-3 mb-md-0">
+                      <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                          <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                          <h4 class="text-uppercase m-0">Address</h4>
+                          <hr class="my-4">
+                          <div class="small text-black-50">4923 Market Street, Orlando FL</div>
+                        </div>
+                      </div>
                     </div>
-                    <!--<div class="col-xs-12 col-sm-12 col-md-2">-->
-                    <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
-                            <ul class="meta-search">
-                                    <li><h2 class="artist-name">Cold Play</h2></li>
-                                    <li><h6 class="followers">10,000,000 followers</h6></li>
-                                    <li><h6 class="genre">genre 1 genre 2 genre 3</h6></li>
-                                </ul>
-                                <ul class="venue-info">
-                                    <li><p class="venue">Olympic Stadium - Arlington, VA</p></li>
-                                    <li><p class="date">Friday, February 8th, 2019</p></li>
-                                    <li><p class="time">5:00 PM</p></li>
-                                    <li><p class="price">Price</p></li>
-
-                                </ul>
-
-                            <div style="width:500px;height:100px;border:1px solid #000;">This is a rectangle!</div>
-                            <br>
-
-                            <button type="button" class="btn btn-primary btn-block"><a href=""><span>Get Tickets</span></a></button>
+            
+                    <div class="col-md-4 mb-3 mb-md-0">
+                      <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                          <i class="fas fa-envelope text-primary mb-2"></i>
+                          <h4 class="text-uppercase m-0">Email</h4>
+                          <hr class="my-4">
+                          <div class="small text-black-50">
+                            <a href="#">complaints@weDGAF.recyclebin</a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <!-- <div class="col-xs-12 col-sm-12 col-md-7 excerpet">-->
-                    <div class="col-xs-12 col-sm-12 col-md-2">
-                        <!--<ul class="meta-search">
-                            <li><i class="glyphicon glyphicon-calendar"></i> <span>02/15/2014</span></li>
-                            <li><i class="glyphicon glyphicon-time"></i> <span>4:28 pm</span></li>
-                            <li><i class="glyphicon glyphicon-tags"></i> <span>People</span></li>
-                        </ul>-->
-                        <a href="https://www.spotify.com/us/" target="_blank" class="mx-2" style="font-size: 60px;">
-                            <i class="fab fa-spotify"></i>
+            
+                    <div class="col-md-4 mb-3 mb-md-0">
+                      <div class="card py-4 h-100">
+                        <div class="card-body text-center">
+                          <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                          <h4 class="text-uppercase m-0">Phone</h4>
+                          <hr class="my-4">
+                          <div class="small text-black-50">+1 (555) 902-8832</div>
+                        </div>
+                      </div>
                     </div>
-                    <span class="clearfix borda"></span>
-                </article>
-
-                <!--<article class="search-result row">
-                    <div class="col-xs-12 col-sm-12 col-md-3">
-                        <a href="#" title="Lorem ipsum" class="thumbnail"><img src="http://lorempixel.com/250/140/food" alt="Lorem ipsum" /></a>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-2">
-                        <ul class="meta-search">
-                            <li><i class="glyphicon glyphicon-calendar"></i> <span>02/13/2014</span></li>
-                            <li><i class="glyphicon glyphicon-time"></i> <span>8:32 pm</span></li>
-                            <li><i class="glyphicon glyphicon-tags"></i> <span>Food</span></li>
-                        </ul>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-7">
-                        <h3><a href="#" title="">Voluptatem, exercitationem, suscipit, distinctio</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.</p>						
-                        <span class="plus"><a href="#" title="Lorem ipsum"><i class="glyphicon glyphicon-plus"></i></a></span>
-                    </div>
-                    <span class="clearfix borda"></span>
-                </article>
-        
-                <article class="search-result row">
-                    <div class="col-xs-12 col-sm-12 col-md-3">
-                        <a href="#" title="Lorem ipsum" class="thumbnail"><img src="http://lorempixel.com/250/140/sports" alt="Lorem ipsum" /></a>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-2">
-                        <ul class="meta-search">
-                            <li><i class="glyphicon glyphicon-calendar"></i> <span>01/11/2014</span></li>
-                            <li><i class="glyphicon glyphicon-time"></i> <span>10:13 am</span></li>
-                            <li><i class="glyphicon glyphicon-tags"></i> <span>Sport</span></li>
-                        </ul>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-7">
-                        <h3><a href="#" title="">Voluptatem, exercitationem, suscipit, distinctio</a></h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, exercitationem, suscipit, distinctio, qui sapiente aspernatur molestiae non corporis magni sit sequi iusto debitis delectus doloremque.</p>						
-                        <span class="plus"><a href="#" title="Lorem ipsum"><i class="glyphicon glyphicon-plus"></i></a></span>
-                    </div>
-                    <span class="clearfix border"></span>
-                </article>	-->
-
-            </section>
-
-            <!-- Footer -->
-            <footer class="bg-black text-center text-white-50">
-
-                <div>
-                    <h4 class="bg-black text-center text-white-50">Powered By</h4>
-                    <br>
-                    <a href="#" class="mx-3">
-                        <i class="far fa-money-check-alt"></i>
-                    </a>
-                    <a href="https://www.spotify.com/us/" target="_blank" class="mx-2">
-                        <i class="fab fa-spotify"></i>
+                  </div>
+            
+                  <div class="social d-flex justify-content-center">
+                    <a href="#" class="mx-2">
+                      <i class="fab fa-spotify"></i>
                     </a>
                     <a href="#" class="mx-2">
-                        <i class="fab fa-github"></i>
+                      <i class="fas fa-ticket-alt"></i>
                     </a>
+                    <!--<a href="#" class="mx-2">
+                      <i class="fab fa-github"></i>
+                    </a>-->
+                  </div>
+            
                 </div>
-                <br>
-                <div class="container">
-                    Created by Emmanuel, Nicolas, Nolan, Ansar
-                </div>
-                <br>
-                <br>
-                <div class="container">
-                    Copyright &copy; Blue Group 2019
-                </div>
-            </footer>
+              </section>
+             
 
+            <!-- Footer -->
+            <footer class="bg-black small text-center text-white-50 footer" >
+                    <div class="container">
+                      Copyright &copy; Your Website 2019
+                    </div>
+                  </footer>
         </div>
 
 </body>
