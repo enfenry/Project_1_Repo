@@ -15,7 +15,43 @@ $(document).ready(function () {
     var database = firebase.database(); 
 
     // clearing out database upon load
-    database.ref('/artists').remove();
+    // database.ref('/artists').remove();
+
+    /* 
+    GETTING THE TOKEN FROM DATABASE, UNCOMMENT ONCE RUNNING LOCALLY
+    // Spotify token (currently getting using Postman)
+    var token = ''
+
+    // getting token from callback URL
+    if (window.location.pathname.includes('callback')) {
+        console.log("you are on right page!");
+        var url = window.location.href;
+        var access_token = new URL(url).hash.split('&').filter(function(el) { if(el.match('access_token') !== null) return true; })[0].split('=')[1];
+        access_token = {
+            token: access_token
+        }
+
+        // updating token in firebase
+        database.ref('/tokens').set(access_token);
+
+    }
+
+    // retrieving token
+    database.ref('/tokens').on("value", function(snapshot) {
+
+        // Log everything that's coming out of snapshot
+        console.log(snapshot.val());
+        token = snapshot.val().token;
+        console.log(token);
+        // Handle the errors
+    }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+    */
+
+
+
+
 
     const geocodingAPIkey = 'AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k';
     const ticketmasterAPIkey = '1FADcqMEkzQiSakwUoKLPibod91GMG6g';
@@ -35,8 +71,23 @@ $(document).ready(function () {
         results: $('#results'),
         pagesTop: $('#pages-top'),
         pagesBottom: $('#pages-bottom'),
-        events: $('#events')
+        events: $('#events'),
+        email: $('#input-email'),
+        emailSubmit: $('#email-submit')
+
     }
+    
+    // subscribe emails
+    DOM.emailSubmit.on('click', function() {
+        event.preventDefault();
+        let input = DOM.email.val().trim();
+        thisEmail = {
+            email: input,
+        }
+        database.ref('/emails').push(thisEmail);
+        DOM.email.val('');
+
+    })
 
     DOM.searchButton.on('click', function () {
         event.preventDefault();
@@ -356,7 +407,7 @@ $(document).ready(function () {
     }
     
     var allArtists = [];
-    var token = 'BQBEshNEn3hfCKJ__3P0n-JhBf2-EmNr979tUthdb_5a3CIylwqoQn8nETomWaIbJ2cguGy_55sTfIBT7YU';
+    var token = 'BQDDzd29yiua53K9DAFxB-t_3FcIQlqomO1CytO5fZq8iWBr_1SFH-QGsSugJcFNSMkTyJa8Z4EftjWEUac';
 
     // spotify API calls
     var spotifyData = function(artist, venueSummary, genreSummary, dateSummary, priceSummary, ticketLink, time) {
@@ -459,26 +510,27 @@ $(document).ready(function () {
         `
         <section class="projects-section bg-light">
         <div class="container">
+
+        <div class="container">
     
           <!-- Featured Project Row -->
           <div id="projects" class="row align-items-center no-gutters mb-4 mb-lg-5">
             <div class="col-xl-4 col-lg-7">
-              <img id="results-image" class="img-fluid mb-3 mb-lg-0" src="img/resultsSearchImage.jpg" alt="">
+              <img id="results-image" class="img-fluid mb-3 mb-lg-0" src="${cover}" alt="${name}">
             </div>
             <div class="col-xl-4 col-lg-5">
               <div class="featured-text text-center text-lg-left">
-                <h4>band name</h4>
-                <p class="text-black-50 mb-0">Followers</p>
-                <P class="text-black-50 mb-0">Genre1 Genre2 Genre3</P>
+                <h4>${name}</h4>
+                <p class="text-black-50 mb-0">Followers: ${numberWithCommas(followers)}</p>
                 
               </div>
             </div>
             <div class="col-xl-4 col-lg-5">
               <div class="featured-text text-center text-lg-left">
-                <P class="text-black-50 mb-0">Venue</P>
-                <P class="text-black-50 mb-0">date</P>
-                <P class="text-black-50 mb-0">time</P>
-                <P class="text-black-50 mb-0">Price Range</P>
+                <P class="text-black-50 mb-0">${venueSummary}</P>
+                <P class="text-black-50 mb-0">${dateSummary}</P>
+                <P class="text-black-50 mb-0">${time}</P>
+                <P class="text-black-50 mb-0">${priceSummary}</P>
     
               </div>
             </div>
@@ -490,59 +542,37 @@ $(document).ready(function () {
               </div>-->
             <div class="col-xl-4 col-lg-5">
                 <div class="hitsong-text text-center text-lg-left">
-                  <p class="text-black-50 mb-0">Hit Songs</p>
-                  <P class="text-black-50 mb-0">song1</P>
-                  <P class="text-black-50 mb-0">song2</P>
-                  <P class="text-black-50 mb-0">song3</P>
-                  <P class="text-black-50 mb-0">song4</P>
+                <table class="table table-hover table-sm" id='tracks-table'>
+                    <thead class='thead-dark'>
+                        <tr>
+                        <th scope="col">Top Songs</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            ${topTracksPrint.join("")};
+                        </tbody>
+                </table>
       
                 </div>
                 
               </div>
               <div class="col-xl-4 col-lg-10">
-                <div class="featured-text text-center text-lg-left">
-                  <button type="submit" class="btn btn-primary mx-auto">
-                    <i class="fab fa-spotify fa-2x"></i>
-                  </button>
-                  
-                </div>
+              <div class="featured-text text-center text-lg-left">
+                <a class="btn btn-primary mx-auto" href="${ticketLink}">Buy Tickets</a>
+                
+            </div>
               </div>
     
-              <div class="col-xl-4 col-lg-10">
-                  <div class="featured-text text-center text-lg-left">
-                    <button type="submit" class="btn btn-primary mx-auto">buy tickets</button>
-                    
-                  </div>
+
                 </div>
     
           </div>
+          </div>
+          </section>
     
-      </section>
         `
             
-            
-            
-        // `
-        // <p><b>Artist Name: </b><span id="name">${name}</span></p> 
-        // <p><b>Followers: </b><span id="followers">${numberWithCommas(followers)}</span> </p>
-        // <p><b>Album Cover:</b><span id="cover"><img src='${cover}'></span> </p>
-        // <p><b>Genre Summary:</b><span id="cover">${genreSummary}</span> </p>
-        // <p><b>Venue Summary:</b><span id="cover">${venueSummary}</span> </p>
-        // <p><b>Date Summary:</b><span id="cover">${dateSummary}</span> </p>
-        // <p><b>Price Summary:</b><span id="cover">${priceSummary}</span> </p>
-        // <p><b>Ticket Link:</b><span id="cover">${ticketLink}</span> </p>
-        // <p><b>Time:</b><span id="cover">${time}</span> </p>
-        // <table class="table table-hover table-sm" id='tracks-table'>
-        //     <thead class='thead-dark'>
-        //         <tr>
-        //         <th scope="col">Top Songs</th>
-        //         </tr>
-        //     </thead>
-        //     <tbody>
-        //     ${topTracksPrint.join("")};
-        //     </tbody>
-        // </table>
-        // `
+        
         
         )
 

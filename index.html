@@ -30,6 +30,7 @@
     <!-- Custom styles for this template -->
     <link href="./assets/style.css" rel="stylesheet">
     <link href="./assets/reset.css" rel="stylesheet">
+    <link href="./css/grayscale.css" rel="stylesheet">
 
 </head>
 
@@ -41,7 +42,7 @@
           <a href="./index-e.html"><img src="./assets/images/logo.png"></a>
     
     
-          <a href="https://accounts.spotify.com/en/login" target="_blank" class="mx-2"><span>Log In to Spotify</span>
+          <a href="https://accounts.spotify.com/authorize?client_id=8a60777b279f46b8a9d4c902df38889e&redirect_uri=http:%2F%2Flocalhost:8888%2Fcallback&scope=user-read-private%20user-read-email&response_type=token" target="_blank" class="mx-2"><span>Log In to Spotify</span>
             <i class="fab fa-spotify"></i>
           </a>
          
@@ -73,8 +74,8 @@
               <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
     
               <form class="form-inline d-flex">
-                <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
-                <button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
+                <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="input-email" placeholder="Enter email address...">
+                <button type="submit" class="btn btn-primary mx-auto" id="email-submit">Subscribe</button>
               </form>
     
             </div>
@@ -116,6 +117,39 @@
         </div>
 
     <script src="app.js"></script>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+
+        window.onSpotifyWebPlaybackSDKReady = () => {
+
+        const player = new Spotify.Player({
+            name: 'Web Playback Project-3',
+            getOAuthToken: cb => { cb(token); }
+        });
+
+        // Error handling
+        player.addListener('initialization_error', ({ message }) => { console.error(message); });
+        player.addListener('authentication_error', ({ message }) => { console.error(message); });
+        player.addListener('account_error', ({ message }) => { console.error(message); });
+        player.addListener('playback_error', ({ message }) => { console.error(message); });
+
+        // Playback status updates
+        player.addListener('player_state_changed', state => { console.log(state); });
+
+        // Ready
+        player.addListener('ready', ({ device_id }) => {
+            console.log('Ready with Device ID', device_id);
+        });
+
+        // Not Ready
+        player.addListener('not_ready', ({ device_id }) => {
+            console.log('Device ID has gone offline', device_id);
+        });
+
+        // Connect to the player!
+        player.connect();
+        };
+    </script>
 </body>
 
 </html>
