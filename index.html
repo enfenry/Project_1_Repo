@@ -2,155 +2,264 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>Rave On</title>
+  <title>Rave On</title>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-        crossorigin="anonymous">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+    crossorigin="anonymous">
 
-    <!-- jQuery, Firebase, currencyFormatter, moment -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/currencyformatter.js/2.2.0/currencyFormatter.min.js'></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+  <!-- jQuery, Firebase, currencyFormatter, moment -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/currencyformatter.js/2.2.0/currencyFormatter.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
 
-    <!-- Custom fonts for this template -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-        crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+  <!-- Custom fonts for this template -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+    crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="./assets/style.css" rel="stylesheet">
-    <link href="./assets/reset.css" rel="stylesheet">
-    <link href="./css/grayscale.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <!-- <link href="./assets/reset.css" rel="stylesheet"> -->
+  <link href="./assets/style.css" rel="stylesheet">
+  <link href="./css/grayscale.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="./css/grayscale.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
-      <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-        <div class="container">
-          <a href="./index-e.html"><img src="./assets/images/logo.png"></a>
-    
-    
-          <a href="https://accounts.spotify.com/authorize?client_id=8a60777b279f46b8a9d4c902df38889e&redirect_uri=http:%2F%2Flocalhost:8888%2Fcallback&scope=user-read-private%20user-read-email&response_type=token" target="_blank" class="mx-2"><span>Log In to Spotify</span>
-            <i class="fab fa-spotify"></i>
-          </a>
-         
-        </div>
-      </nav>
-    
-      <!-- Header -->
-      <header class="masthead">
-        <div class="container d-flex h-100 align-items-center">
-          <div class="mx-auto text-center">
-            <h1 class="mx-auto my-0 text-uppercase text-flicker-in-glow">Rave On</h1>
-            <h2 class="text-white-50 mx-auto mt-2 mb-5 text-shadow-drop-top">Hear it. See it. Live it.</h2>
-            <form class="form-inline d-flex">
-              <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id='cityInput' placeholder='Enter city/state or zip'>
-            </form>
-            <br>
-            <button type="Find Concerts" class="btn btn-danger js-scroll-trigger pulsate-bck" id='searchBtn'><span>Find Concerts</span></button>
-          </div>
-        </div>
-      </header>
-    
-      <!-- Signup Section-->
-      <section id="signup" class="signup-section">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-10 col-lg-8 mx-auto text-center">
-    
-              <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
-              <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
-    
-              <form class="form-inline d-flex">
-                <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="input-email" placeholder="Enter email address...">
-                <button type="submit" class="btn btn-primary mx-auto" id="email-submit">Subscribe</button>
-              </form>
-    
-            </div>
-          </div>
-        </div>
-      </section>
-    
-    
-      <!--Footer -->
-      <footer class="bg-black text-center text-white-50">
-        <div>
-          <h4 class="bg-black text-center text-white-50">Powered By</h4>
+  <div id='emmanuel'>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a href="./index.html"><img class='logo' src="./assets/images/logo.png"></a>
+
+
+        <a href="https://accounts.spotify.com/authorize?client_id=8a60777b279f46b8a9d4c902df38889e&redirect_uri=http:%2F%2Flocalhost:8888%2Fcallback&scope=user-read-private%20user-read-email&response_type=token"
+          target="_blank" class="mx-2"><span>Log In to Spotify</span>
+          <i class="fab fa-spotify"></i>
+        </a>
+
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead emmanuel">
+      <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+          <h1 class="mx-auto my-0 text-uppercase text-flicker-in-glow">Rave On</h1>
+          <h2 class="text-white-50 mx-auto mt-2 mb-5 text-shadow-drop-top">Hear it. See it. Live it.</h2>
+          <form class="form-inline d-flex">
+            <input type="text" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0 cityInput" placeholder='Enter city/state or zip'>
+          </form>
           <br>
-          <a href="https://www.spotify.com/us/" target="_blank" class="mx-2">
-            <i class="fab fa-spotify"></i>
-          </a>
-          <a href="#" class="mx-2">
-            <i class="fab fa-github"></i>
-          </a>
+          <button type="Find Concerts" class="btn btn-danger js-scroll-trigger pulsate-bck emmanuel searchBtn"><span>Find
+              Concerts</span></button>
         </div>
-        <br>
-        <div class="container">
-          Created by Emmanuel, Nicolas, Nolan, Ansar
-        </div>
-        <br>
-        <br>
-        <div class="container">
-          Copyright &copy; Blue Group 2019
-        </div>
-      </footer>
+      </div>
+    </header>
 
-        <div id='results'>
-            <div id='pages-top'>
+    <!-- Signup Section-->
+    <section id="signup-emmanuel" class="signup-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+            <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+            <h2 class="text-white mb-5">Subscribe to receive updates!</h2>
+
+            <form class="form-inline d-flex">
+              <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="input-email" placeholder="Enter email address...">
+              <button type="submit" class="btn btn-primary mx-auto emmanuel" id="email-submit">Subscribe</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id='nicolas'>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
+    <link href="./css/grayscale.css" rel="stylesheet">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top"><img id="raveonlogo" class="img-fluid mb-3 mb-lg-0 logo"
+            src="img/logo.png" alt=""></a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+          aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#projects">Search Results</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#city-search">Search More Cities</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section id="city-search" class="background-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+            <h2 class="text-white mb-5">Hear it. See it. Live it.</h2>
+
+            <form class="form-inline d-flex">
+              <input type="text" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0 cityInput" placeholder='Enter city/state or zip'>
+              <button type="submit" class="btn btn-primary mx-auto searchBtn"><span>Find
+                  Concerts</span></button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <div id='results'>
+        <div class='page-button-row bg-light' id='pages-top'>
+        </div>
+        <div class='bg-light' id='events'>
+        </div>
+        <div class='page-button-row bg-light' id='pages-bottom'>
+        </div>
+      </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section bg-black">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Address</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">4923 Market Street, Orlando FL</div>
+              </div>
             </div>
-            <div id='events'>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-envelope text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Email</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">
+                  <a href="#">complaints@weDGAF.recyclebin</a>
+                </div>
+              </div>
             </div>
-            <div id='pages-bottom'>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Phone</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">+1 (555) 902-8832</div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
+    </section>
+  </div>
 
-    <script src="app.js"></script>
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>
-    <script>
+  <!--Footer -->
+  <footer class="bg-black text-center text-white-50">
+    <div>
+      <h4 class="bg-black text-center text-white-50">Powered By</h4>
+      <br>
+      <a href="https://www.spotify.com/us/" target="_blank" class="mx-2">
+        <i class="fab fa-spotify"></i>
+      </a>
+      <a href="#" class="mx-2">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <br>
+    <div class="container">
+      Created by Emmanuel, Nicolas, Nolan, Ansar
+    </div>
+    <br>
+    <br>
+    <div class="container">
+      Copyright &copy; Blue Group 2019
+    </div>
+  </footer>
 
-        window.onSpotifyWebPlaybackSDKReady = () => {
+  <script src="app.js"></script>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script>
 
-        const player = new Spotify.Player({
-            name: 'Web Playback Project-3',
-            getOAuthToken: cb => { cb(token); }
-        });
+    window.onSpotifyWebPlaybackSDKReady = () => {
 
-        // Error handling
-        player.addListener('initialization_error', ({ message }) => { console.error(message); });
-        player.addListener('authentication_error', ({ message }) => { console.error(message); });
-        player.addListener('account_error', ({ message }) => { console.error(message); });
-        player.addListener('playback_error', ({ message }) => { console.error(message); });
+      const player = new Spotify.Player({
+        name: 'Web Playback Project-3',
+        getOAuthToken: cb => { cb(token); }
+      });
 
-        // Playback status updates
-        player.addListener('player_state_changed', state => { console.log(state); });
+      // Error handling
+      player.addListener('initialization_error', ({ message }) => { console.error(message); });
+      player.addListener('authentication_error', ({ message }) => { console.error(message); });
+      player.addListener('account_error', ({ message }) => { console.error(message); });
+      player.addListener('playback_error', ({ message }) => { console.error(message); });
 
-        // Ready
-        player.addListener('ready', ({ device_id }) => {
-            console.log('Ready with Device ID', device_id);
-        });
+      // Playback status updates
+      player.addListener('player_state_changed', state => { console.log(state); });
 
-        // Not Ready
-        player.addListener('not_ready', ({ device_id }) => {
-            console.log('Device ID has gone offline', device_id);
-        });
+      // Ready
+      player.addListener('ready', ({ device_id }) => {
+        console.log('Ready with Device ID', device_id);
+      });
 
-        // Connect to the player!
-        player.connect();
-        };
-    </script>
+      // Not Ready
+      player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+      });
+
+      // Connect to the player!
+      player.connect();
+    };
+  </script>
 </body>
 
 </html>
-

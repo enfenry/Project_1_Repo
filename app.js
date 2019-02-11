@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    $('#nicolas').hide();
 
     var config = {
         apiKey: "AIzaSyAAcY2NfP7w8YTzprHrP77SGLAvMAi8c5c",
@@ -49,10 +49,6 @@ $(document).ready(function () {
     });
     */
 
-
-
-
-
     const geocodingAPIkey = 'AIzaSyAVNZ2_elkGOvb8xXsyF5NSS9PQnW_Ze8k';
     const ticketmasterAPIkey = '1FADcqMEkzQiSakwUoKLPibod91GMG6g';
     let geoURL;
@@ -65,8 +61,8 @@ $(document).ready(function () {
     let weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     let DOM = {
-        inputLocation: $('#cityInput'),
-        searchButton: $('#searchBtn'),
+        inputLocation: $('.cityInput:visible'),
+        searchButton: $('.searchBtn'),
         container: $('.container'),
         results: $('#results'),
         pagesTop: $('#pages-top'),
@@ -91,7 +87,10 @@ $(document).ready(function () {
 
     DOM.searchButton.on('click', function () {
         event.preventDefault();
-        let input = DOM.inputLocation.val().trim();
+        let input = $('.cityInput:visible').val().trim();
+        $('#emmanuel').hide();
+        $('#nicolas').show();
+
         database.ref('/artists').remove();
 
 
@@ -105,7 +104,9 @@ $(document).ready(function () {
                 }
                 else {
                     getArea(coords).then(function(area){
+                        DOM.pagesTop.empty();
                         DOM.events.html("No events found near " + area + ". Try refining your search. It's possible Ticketmaster may not be available in this area.");
+                        DOM.pagesBottom.empty();
                     });
                 }
             });
@@ -138,15 +139,19 @@ $(document).ready(function () {
                 } while (i < j);
                 if (j !== maxPgNum) {
                 let ellipseBtn2 = createFakeBtn('...');
+                styleCurrentBtn(ellipseBtn2, currentPgNum);
                 div.append(ellipseBtn2);
                 let maxPgBtn = createPageBtn(maxPgNum, maxURL);
+                styleCurrentBtn(maxPgBtn, currentPgNum);
                 div.append(maxPgBtn);
                 }
             }
             else if (maxPgNum - currentPgNum <= 5) {
                 let firstPgBtn = createPageBtn('1', firstURL);
+                styleCurrentBtn(firstPgBtn, currentPgNum);
                 div.append(firstPgBtn);
                 let ellipseBtn1 = createFakeBtn('...');
+                styleCurrentBtn(ellipseBtn1, currentPgNum);
                 div.append(ellipseBtn1);
                 let i =7;
                 do {
@@ -158,8 +163,10 @@ $(document).ready(function () {
             }
             else {
                 let firstPgBtn = createPageBtn('1', firstURL);
+                styleCurrentBtn(firstPgBtn, currentPgNum);
                 div.append(firstPgBtn);
                 let ellipseBtn1 = createFakeBtn('...');
+                styleCurrentBtn(ellipseBtn1, currentPgNum);
                 div.append(ellipseBtn1);
                 for (let i = 0; i < 5; i++) {
                     let pgBtn = createPageBtn(currentPgNum + i - 2, genericURL + '&page=' + (currentPgNum + i - 3));
@@ -167,8 +174,10 @@ $(document).ready(function () {
                     div.append(pgBtn);
                 }
                 let ellipseBtn2 = createFakeBtn('...');
+                styleCurrentBtn(ellipseBtn2, currentPgNum);
                 div.append(ellipseBtn2);
                 let maxPgBtn = createPageBtn(maxPgNum, maxURL);
+                styleCurrentBtn(maxPgBtn, currentPgNum);
                 div.append(maxPgBtn);
             }
         }
@@ -201,7 +210,10 @@ $(document).ready(function () {
 
     function styleCurrentBtn(button, currentPgNum) {
         if (button.text() == currentPgNum) {
-            button.attr('style', 'background-color:cyan');
+            button.attr('style', 'background-color:#f4511e');
+        }
+        else {
+            button.attr('style', 'background-color:#212529');
         }
     }
 
@@ -237,12 +249,14 @@ $(document).ready(function () {
     function createFakeBtn(text) {
         let newBtn = $('<button>');
         newBtn.text(text);
+        newBtn.addClass('pg-btn');
         return newBtn;
     }
 
     function createPageBtn(text, url) {
         let newBtn = $('<button>');
         newBtn.text(text);
+        newBtn.addClass('pg-btn');
         newBtn.on('click', function () {
             event.preventDefault();
             getEvents(url).then(function (result) {
@@ -407,7 +421,7 @@ $(document).ready(function () {
     }
     
     var allArtists = [];
-    var token = 'BQDDzd29yiua53K9DAFxB-t_3FcIQlqomO1CytO5fZq8iWBr_1SFH-QGsSugJcFNSMkTyJa8Z4EftjWEUac';
+    var token = 'BQCDf0x6-kuUfC0wp-9rsHg5VqmHDCjnfIMKtUmfwEiLqCKTl1WkBEY4Rku5r7vxMlZPdj9sJkvnDcwL6xU';
 
     // spotify API calls
     var spotifyData = function(artist, venueSummary, genreSummary, dateSummary, priceSummary, ticketLink, time) {
@@ -522,6 +536,7 @@ $(document).ready(function () {
               <div class="featured-text text-center text-lg-left">
                 <h4>${name}</h4>
                 <p class="text-black-50 mb-0">Followers: ${numberWithCommas(followers)}</p>
+                <p class="text-black-50 mb-0">${genreSummary}</p>
                 
               </div>
             </div>
@@ -549,7 +564,7 @@ $(document).ready(function () {
                         </tr>
                         </thead>
                         <tbody>
-                            ${topTracksPrint.join("")};
+                            ${topTracksPrint.join("")}
                         </tbody>
                 </table>
       

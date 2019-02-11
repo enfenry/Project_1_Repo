@@ -86,8 +86,8 @@
   }
 }
 #raveonlogo {
-  max-width: 100px;
-  max-height: 50px;
+  max-width: 80px;
+  max-height: 80px;
   background-color: white;
 }
 
@@ -189,11 +189,12 @@
 }
 
 #results-image {
-  padding: 10px;
+  padding: 1rem 2rem 1rem 2rem;
+
 }
 
 .projects-section {
-  padding: 10rem 0;  
+  padding: 2rem 0;  
 }
 
 .projects-section .featured-text {
